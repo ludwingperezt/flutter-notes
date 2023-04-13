@@ -12,3 +12,8 @@ En la carpeta android/ se colocan todos los archivos para crear una aplicación
 para android.
 
 La carpeta web/ contiene los archivos para crear una aplicación web.
+
+Para agregar nuevas dependencias:
+```  
+flutter pub add <nombre del paquete>
+```
