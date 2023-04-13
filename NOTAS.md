@@ -31,3 +31,23 @@ flutter pub add <nombre del paquete>
 flutter clean android
 
 flutter pub get
+
+## Conectar con firebase
+
+Para conectar el proyecto con firebase es necesario instalar dos herramientas
+CLI:
+* firebase cli
+* flutterfire
+
+Una vez instaladas, es necesario ir a la consola de Google Cloud Platform (si
+es que no se ha hecho antes) y aceptar los términos y condiciones del servicio
+(nada más).
+
+Luego hay que crear un proyecto en la consola web de firebase.
+
+Posterior a esto ya se puede usar el comando siguiente para configurar el proyecto
+de firebase tanto en el backend como en el proyecto de flutter:
+flutterfire configure
+
+https://stackoverflow.com/questions/57145441/solution-google-cloud-sdk-issue-callers-must-accept-terms-of-service
+https://stackoverflow.com/questions/72471732/firebaseerror-http-error-403-the-caller-does-not-have-permission
