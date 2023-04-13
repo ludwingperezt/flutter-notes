@@ -51,3 +51,8 @@ flutterfire configure
 
 https://stackoverflow.com/questions/57145441/solution-google-cloud-sdk-issue-callers-must-accept-terms-of-service
 https://stackoverflow.com/questions/72471732/firebaseerror-http-error-403-the-caller-does-not-have-permission
+
+## Seguridad de las API keys de firebase
+
+https://hanskokx.medium.com/securing-your-firebase-credentials-in-your-flutter-app-and-git-repository-4080fead7968
+https://blog.mbonnin.net/about-the-android-makers-app-security-and-google-servicesjson
