@@ -91,9 +91,23 @@ class _RegistroViewState extends State<RegistroView> {
                       final email = _email.text;
                       final password = _password.text;
 
-                      final userCredentials = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password);
+                      try {
+                        final userCredentials = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                                email: email, password: password);
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          print('Weak password!');
+                        } else if (e.code == 'email-already-in-use') {
+                          print('Email already in use!');
+                        } else if (e.code == 'invalid-email') {
+                          print('Email in invalid!');
+                        } else {
+                          print(e);
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                     child: const Text('Registrarse'),
                   ),

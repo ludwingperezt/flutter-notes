@@ -96,7 +96,16 @@ class _LoginViewState extends State<LoginView> {
                         final userCredentials = await FirebaseAuth.instance
                             .signInWithEmailAndPassword(
                                 email: email, password: password);
-                      } catch (e) {}
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'user-not-found') {
+                        } else if (e.code == 'wrong-password') {
+                          print('Wrong pass');
+                        } else {
+                          print(e);
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
                     },
                     child: const Text('Ingresar'),
                   ),
