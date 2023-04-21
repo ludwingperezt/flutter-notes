@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mynotes/views/login_view.dart';
+import 'package:mynotes/views/inicio_view.dart';
 
 void main() async {
   // Cargar el archivo de variables de entorno.
@@ -28,7 +28,7 @@ void main() async {
         // is not restarted.
         primarySwatch: Colors.amber,
       ),
-      home: const LoginView(),
+      home: const InicioView(),
     ),
   );
 }
