@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/views/login_view.dart';
+import 'package:mynotes/views/notas_view.dart';
 import 'package:mynotes/views/verificar_email_view.dart';
 
 class InicioView extends StatelessWidget {
@@ -38,14 +39,12 @@ class InicioView extends StatelessWidget {
             final user = FirebaseAuth.instance.currentUser;
             final emailVerified = user?.emailVerified ?? false;
 
-            print(user);
-
             if (user == null) {
               return const LoginView();
             }
 
             if (emailVerified) {
-              return const Text('Verificado y loggeado!');
+              return const NotasView();
             } else {
               return const VerificarEmailView();
             }
