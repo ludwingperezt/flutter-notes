@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mynotes/views/inicio_view.dart';
+import 'package:mynotes/views/login_view.dart';
+import 'package:mynotes/views/registro_view.dart';
 
 void main() async {
   // Cargar el archivo de variables de entorno.
@@ -29,6 +31,11 @@ void main() async {
         primarySwatch: Colors.amber,
       ),
       home: const InicioView(),
+      // Creación de las rutas de la app:
+      routes: {
+        '/login/': (context) => const LoginView(),
+        '/registro/': (context) => const RegistroView(),
+      },
     ),
   );
 }
