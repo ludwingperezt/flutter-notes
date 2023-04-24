@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
 import 'package:mynotes/views/login_view.dart';
+import 'package:mynotes/views/verificar_email_view.dart';
 
 class InicioView extends StatelessWidget {
   const InicioView({super.key});
@@ -33,24 +35,33 @@ class InicioView extends StatelessWidget {
           //   break;
 
           case ConnectionState.done:
-            // final user = FirebaseAuth.instance.currentUser;
-            // final emailVerified = user?.emailVerified ?? false;
+            final user = FirebaseAuth.instance.currentUser;
+            final emailVerified = user?.emailVerified ?? false;
 
-            // print(user);
+            print(user);
 
-            // if (emailVerified) {
-            //   print('Loggeado!');
-            // } else {
-            //   print('No loggeado');
+            if (user == null) {
+              return const LoginView();
+            }
 
-            //   // Lo que se hace aqui es que dentro de la misma pantalla se está
-            //   // colocando un Widget, en este caso es el widget de verificación
-            //   // de correo.
-            //   return const VerificarEmailView();
-            // }
+            if (emailVerified) {
+              return const Text('Verificado y loggeado!');
+            } else {
+              return const VerificarEmailView();
+            }
 
-            // return const Text('Hecho!');
-            return const LoginView();
+          // if (emailVerified) {
+          //   print('Loggeado!');
+          // } else {
+          //   print('No loggeado');
+
+          //   // Lo que se hace aqui es que dentro de la misma pantalla se está
+          //   // colocando un Widget, en este caso es el widget de verificación
+          //   // de correo.
+          //   return const VerificarEmailView();
+          // }
+
+          // return const Text('Hecho!');
           default:
             return const CircularProgressIndicator();
         }
