@@ -62,3 +62,5 @@ https://blog.mbonnin.net/about-the-android-makers-app-security-and-google-servic
 1. Es necesario un enum donde se listan las acciones a presentar en el menú
 2. Definir PopupMenuButton (botón principal de acceso al menú) y PopupMenuItem
    (Cada elemento del menú).
+
+## 

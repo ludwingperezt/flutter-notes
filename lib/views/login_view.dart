@@ -73,6 +73,14 @@ class _LoginViewState extends State<LoginView> {
 
                 // print(userCredentials);
                 devtools.log(userCredentials.toString());
+
+                // Ir a la pantalla principal del usuario loggeado
+                if (context.mounted) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/notas/',
+                    (route) => false,
+                  );
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
                 } else if (e.code == 'wrong-password') {
