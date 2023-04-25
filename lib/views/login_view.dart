@@ -77,12 +77,24 @@ class _LoginViewState extends State<LoginView> {
                 // print(userCredentials);
                 devtools.log(userCredentials.toString());
 
-                // Ir a la pantalla principal del usuario loggeado
-                if (context.mounted) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    notasRoute,
-                    (route) => false,
-                  );
+                final user = FirebaseAuth.instance.currentUser;
+                if (user?.emailVerified ?? false) {
+                  // Ir a la pantalla principal del usuario loggeado
+                  if (context.mounted) {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      notasRoute,
+                      (route) => false,
+                    );
+                  }
+                } else {
+                  if (context.mounted) {
+                    // Si la cuenta no ha verificado su email, entonces
+                    // enviar al usuario a la pantalla de confirmación de email.
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      verificarEmailRoute,
+                      (route) => false,
+                    );
+                  }
                 }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
