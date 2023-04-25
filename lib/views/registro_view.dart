@@ -71,9 +71,25 @@ class _RegistroViewState extends State<RegistroView> {
               final password = _password.text;
 
               try {
-                final userCredentials = await FirebaseAuth.instance
-                    .createUserWithEmailAndPassword(
-                        email: email, password: password);
+                final userCredentials =
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: email,
+                  password: password,
+                );
+
+                // Una vez que el registro es exitoso se envía el email para
+                // confirmar la dirección de correo sin que el usuario tenga
+                // que hacerlo manualmente.
+                final user = FirebaseAuth.instance.currentUser;
+                user?.sendEmailVerification();
+
+                // En este caso se usa pushNamed y no pushNamedAndRemoveUntil
+                // porque no queremos que las vistas anteriores sean destruidas
+                // en caso de que el usuario quiera retornar a la vista de registro
+                // y corregir datos.
+                if (context.mounted) {
+                  Navigator.of(context).pushNamed(verificarEmailRoute);
+                }
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'weak-password') {
                   devtools.log('Contraseña debil');

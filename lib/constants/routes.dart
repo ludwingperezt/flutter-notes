@@ -3,3 +3,4 @@
 const loginRoute = '/login/';
 const registroRoute = '/registro/';
 const notasRoute = '/notas/';
+const verificarEmailRoute = '/verificar-email/';

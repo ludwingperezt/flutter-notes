@@ -5,6 +5,7 @@ import 'package:mynotes/views/inicio_view.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notas_view.dart';
 import 'package:mynotes/views/registro_view.dart';
+import 'package:mynotes/views/verificar_email_view.dart';
 
 void main() async {
   // Cargar el archivo de variables de entorno.
@@ -38,6 +39,7 @@ void main() async {
         loginRoute: (context) => const LoginView(),
         registroRoute: (context) => const RegistroView(),
         notasRoute: (context) => const NotasView(),
+        verificarEmailRoute: (context) => const VerificarEmailView(),
       },
     ),
   );
