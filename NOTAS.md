@@ -56,3 +56,9 @@ https://stackoverflow.com/questions/72471732/firebaseerror-http-error-403-the-ca
 
 https://hanskokx.medium.com/securing-your-firebase-credentials-in-your-flutter-app-and-git-repository-4080fead7968
 https://blog.mbonnin.net/about-the-android-makers-app-security-and-google-servicesjson
+
+## Para usar un menú en un AppBar
+
+1. Es necesario un enum donde se listan las acciones a presentar en el menú
+2. Definir PopupMenuButton (botón principal de acceso al menú) y PopupMenuItem
+   (Cada elemento del menú).

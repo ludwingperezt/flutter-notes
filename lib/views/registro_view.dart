@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtools show log;
 
 // Widget para registro de nuevos usuarios.
 class RegistroView extends StatefulWidget {
@@ -72,16 +73,21 @@ class _RegistroViewState extends State<RegistroView> {
                         email: email, password: password);
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'weak-password') {
-                  print('Weak password!');
+                  devtools.log('Contraseña debil');
+                  // print('Weak password!');
                 } else if (e.code == 'email-already-in-use') {
-                  print('Email already in use!');
+                  devtools.log('Email en uso');
+                  // print('Email already in use!');
                 } else if (e.code == 'invalid-email') {
-                  print('Email in invalid!');
+                  // print('Email in invalid!');
+                  devtools.log('Email invalido');
                 } else {
-                  print(e);
+                  devtools.log(e.toString());
+                  // print(e);
                 }
               } catch (e) {
-                print(e);
+                devtools.log(e.toString());
+                // print(e);
               }
             },
             child: const Text('Registrarse'),
