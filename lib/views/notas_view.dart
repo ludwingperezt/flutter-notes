@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/enums/menu_action.dart';
 import 'dart:developer' as devtools show log;
 
@@ -33,7 +34,7 @@ class _NotasViewState extends State<NotasView> {
                     // https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
                     if (context.mounted) {
                       Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/login/', (_) => false);
+                          .pushNamedAndRemoveUntil(loginRoute, (_) => false);
                     }
                   }
                   break;
@@ -60,6 +61,7 @@ class _NotasViewState extends State<NotasView> {
   }
 }
 
+/// Modal que sirve para confirmar el cierre de la sesión
 Future<bool> mostrarLogOutDialog(BuildContext context) {
   return showDialog<bool>(
     context: context,
