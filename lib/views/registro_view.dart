@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/dialogs/show_error_dialog.dart';
 
 // Widget para registro de nuevos usuarios.
 class RegistroView extends StatefulWidget {
@@ -76,20 +77,40 @@ class _RegistroViewState extends State<RegistroView> {
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'weak-password') {
                   devtools.log('Contraseña debil');
+                  await mostrarErrorDialog(
+                    context,
+                    'Contraseña debil',
+                  );
                   // print('Weak password!');
                 } else if (e.code == 'email-already-in-use') {
                   devtools.log('Email en uso');
+                  await mostrarErrorDialog(
+                    context,
+                    'Email en uso',
+                  );
                   // print('Email already in use!');
                 } else if (e.code == 'invalid-email') {
                   // print('Email in invalid!');
                   devtools.log('Email invalido');
+                  await mostrarErrorDialog(
+                    context,
+                    'Email no válido',
+                  );
                 } else {
                   devtools.log(e.toString());
                   // print(e);
+                  await mostrarErrorDialog(
+                    context,
+                    'Error: ${e.code}',
+                  );
                 }
               } catch (e) {
                 devtools.log(e.toString());
                 // print(e);
+                await mostrarErrorDialog(
+                  context,
+                  e.toString(),
+                );
               }
             },
             child: const Text('Registrarse'),
