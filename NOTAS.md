@@ -80,3 +80,7 @@ Para correr tests:
 ```  
 flutter test <path del archivo de tests a ejecutar>
 ```  
+
+## Dependencias para manejar base de datos SQLite
+
+flutter pub add sqflite path_provider path
