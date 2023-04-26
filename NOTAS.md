@@ -63,4 +63,20 @@ https://blog.mbonnin.net/about-the-android-makers-app-security-and-google-servic
 2. Definir PopupMenuButton (botón principal de acceso al menú) y PopupMenuItem
    (Cada elemento del menú).
 
-## 
+## Testing
+
+Existen tres tipos de tests para una aplicación flutter  
+
+- Unit tests
+- Integration tests
+- Widget tests
+
+Para hacer testing de una app es necesario instalar las dependencias de testing:
+```  
+flutter pub add test --dev
+```  
+
+Para correr tests:
+```  
+flutter test <path del archivo de tests a ejecutar>
+```  

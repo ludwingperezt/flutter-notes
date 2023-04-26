@@ -6,8 +6,13 @@ import 'package:flutter/foundation.dart';
 class AuthUser {
   final bool isEmailVerified;
 
-  const AuthUser(this.isEmailVerified);
+  // Al colocar {required this.isEmailVerified} como parámetro del constructor
+  // se habilita que un objeto de tipo AuthUser pueda ser creado nombrando el
+  // nombre del parámetro, por ejemplo:
+  // const user = AuthUser(isEmailVerified: true);
+  const AuthUser({required this.isEmailVerified});
 
   // Aplicación del patrón factory.
-  factory AuthUser.fromFirebase(User user) => AuthUser(user.emailVerified);
+  factory AuthUser.fromFirebase(User user) =>
+      AuthUser(isEmailVerified: user.emailVerified);
 }
