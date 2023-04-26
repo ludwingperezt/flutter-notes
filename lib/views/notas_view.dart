@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/dialogs/show_confirmar_logout_dialog.dart';
 import 'package:mynotes/enums/menu_action.dart';
 import 'dart:developer' as devtools show log;
+
+import 'package:mynotes/services/auth/auth_service.dart';
 
 class NotasView extends StatefulWidget {
   const NotasView({super.key});
@@ -28,7 +29,7 @@ class _NotasViewState extends State<NotasView> {
 
                   if (debeCerrarSesion) {
                     // Hacer logout de Firebase.
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().cerrarSesion();
 
                     // context.mounted resuelve esta advertencia:
                     // Don't use 'BuildContext's across async gaps. Try rewriting the code to not reference the 'BuildContext'

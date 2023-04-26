@@ -6,6 +6,7 @@ import 'package:mynotes/services/auth/auth_user.dart';
 
 // Esta es una interfaz que TODOS los proveedores de autenticación deben cumplir.
 abstract class AuthProvider {
+  Future<void> initialize();
   AuthUser? get currentUser;
 
   Future<AuthUser> logIn({

@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/dialogs/show_error_dialog.dart';
+import 'package:mynotes/services/auth/auth_exceptions.dart';
+import 'package:mynotes/services/auth/auth_service.dart';
 
 // Widget para registro de nuevos usuarios.
 class RegistroView extends StatefulWidget {
@@ -71,17 +70,12 @@ class _RegistroViewState extends State<RegistroView> {
               final password = _password.text;
 
               try {
-                final userCredentials =
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                await AuthService.firebase().crearUsuario(
                   email: email,
                   password: password,
                 );
 
-                // Una vez que el registro es exitoso se envía el email para
-                // confirmar la dirección de correo sin que el usuario tenga
-                // que hacerlo manualmente.
-                final user = FirebaseAuth.instance.currentUser;
-                user?.sendEmailVerification();
+                await AuthService.firebase().enviarEmailVerificacion();
 
                 // En este caso se usa pushNamed y no pushNamedAndRemoveUntil
                 // porque no queremos que las vistas anteriores sean destruidas
@@ -90,42 +84,25 @@ class _RegistroViewState extends State<RegistroView> {
                 if (context.mounted) {
                   Navigator.of(context).pushNamed(verificarEmailRoute);
                 }
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'weak-password') {
-                  devtools.log('Contraseña debil');
-                  await mostrarErrorDialog(
-                    context,
-                    'Contraseña debil',
-                  );
-                  // print('Weak password!');
-                } else if (e.code == 'email-already-in-use') {
-                  devtools.log('Email en uso');
-                  await mostrarErrorDialog(
-                    context,
-                    'Email en uso',
-                  );
-                  // print('Email already in use!');
-                } else if (e.code == 'invalid-email') {
-                  // print('Email in invalid!');
-                  devtools.log('Email invalido');
-                  await mostrarErrorDialog(
-                    context,
-                    'Email no válido',
-                  );
-                } else {
-                  devtools.log(e.toString());
-                  // print(e);
-                  await mostrarErrorDialog(
-                    context,
-                    'Error: ${e.code}',
-                  );
-                }
-              } catch (e) {
-                devtools.log(e.toString());
-                // print(e);
+              } on WeakPasswordAuthException {
                 await mostrarErrorDialog(
                   context,
-                  e.toString(),
+                  'Contraseña debil',
+                );
+              } on EmailAlreadyInUseAuthException {
+                await mostrarErrorDialog(
+                  context,
+                  'Email en uso',
+                );
+              } on InvalidEmailAuthException {
+                await mostrarErrorDialog(
+                  context,
+                  'Email no válido',
+                );
+              } on GenericAuthException {
+                await mostrarErrorDialog(
+                  context,
+                  'Fallo al registrar usuario',
                 );
               }
             },

@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/services/auth/auth_exceptions.dart';
+import 'package:mynotes/services/auth/auth_service.dart';
 
 class VerificarEmailView extends StatefulWidget {
   const VerificarEmailView({super.key});
@@ -23,14 +24,15 @@ class _VerificarEmailViewState extends State<VerificarEmailView> {
             'Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo'),
         TextButton(
           onPressed: () async {
-            final user = FirebaseAuth.instance.currentUser;
-            await user?.sendEmailVerification();
+            await AuthService.firebase().enviarEmailVerificacion();
           },
           child: const Text('Enviar email de vefificación'),
         ),
         TextButton(
           onPressed: () async {
-            await FirebaseAuth.instance.signOut();
+            try {
+              await AuthService.firebase().cerrarSesion();
+            } on UserNotLoggedInAuthException {}
 
             if (context.mounted) {
               Navigator.of(context)

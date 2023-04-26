@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mynotes/firebase_options.dart';
+import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notas_view.dart';
 import 'package:mynotes/views/verificar_email_view.dart';
@@ -12,9 +10,7 @@ class InicioView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ),
+      future: AuthService.firebase().initialize(),
       // FutureBuilder se usa para inicializar un widget HASTA que una promesa se haya completado, en este caso hasta que la app Firebase se haya iniciado.
       builder: (context, snapshot) {
         // La función builder SIEMPRE debe retornar un widget.
@@ -36,8 +32,8 @@ class InicioView extends StatelessWidget {
           //   break;
 
           case ConnectionState.done:
-            final user = FirebaseAuth.instance.currentUser;
-            final emailVerified = user?.emailVerified ?? false;
+            final user = AuthService.firebase().currentUser;
+            final emailVerified = user?.isEmailVerified ?? false;
 
             if (user == null) {
               return const LoginView();
