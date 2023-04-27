@@ -39,14 +39,26 @@ class NotasService {
 
   // Implementación de Singleton para la clase de servicio de notas (NotasService)
   static final NotasService _shared = NotasService._sharedInstance();
-  NotasService._sharedInstance();
+  NotasService._sharedInstance() {
+    _notasStreamController = StreamController<List<DatabaseNota>>.broadcast(
+      onListen: () {
+        // Este callback se llamará cada vez que se suscriba un nuevo listener
+        // a este stream.
+        _notasStreamController.sink.add(_notas);
+      },
+    );
+  }
   factory NotasService() => _shared;
 
   // El StreamController es una interfaz entre la caché, que en este caso es
   // la variabble _notas y el mundo exterior.  La UI estará al pendiente de los
   // cambios en el StreamController.
-  final _notasStreamController =
-      StreamController<List<DatabaseNota>>.broadcast();
+  // Al ser un broadcast existe una peculiaridad y es que cada cliente nuevo que
+  // se suscribe a este stream NO recibe el estado actual de stream sino hasta
+  // que se presenta una actualización, por esa razón la inicialización se hace
+  // en el constructor.
+  late final StreamController<List<DatabaseNota>> _notasStreamController;
+  //
 
   // Para obtener todas las notas
   Stream<List<DatabaseNota>> get todasNotas => _notasStreamController.stream;

@@ -27,12 +27,6 @@ class _NotasViewState extends State<NotasView> {
   }
 
   @override
-  void dispose() {
-    _notasService.cerrarDB();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -114,6 +108,33 @@ class _NotasViewState extends State<NotasView> {
                     // la acción que realizan es la misma:
                     case ConnectionState.active:
                     case ConnectionState.waiting:
+                      if (snapshot.hasData) {
+                        final todasNotas = snapshot.data as List<DatabaseNota>;
+
+                        return ListView.builder(
+                          itemCount: todasNotas.length,
+                          itemBuilder: (context, index) {
+                            // obtener cada nota en la lista según su índice
+                            final nota = todasNotas[index];
+
+                            // ListTile representa a cada uno de los elementos
+                            // de la lista. Cada uno de estos elementos mostrará
+                            // una parte del texto (si es muy largo) y será
+                            // recortado a una línea con puntos suspensivos
+                            // al final de la línea.
+                            return ListTile(
+                              title: Text(
+                                nota.texto,
+                                maxLines: 1,
+                                softWrap: true,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
                       return const Text('Esperando cargar todas las notas...');
                     default:
                       return const CircularProgressIndicator();
