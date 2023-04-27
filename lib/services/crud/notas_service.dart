@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:mynotes/services/crud/crud_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
@@ -33,10 +35,50 @@ const crearNotaTableSql = '''CREATE TABLE IF NOT EXISTS "nota" (
 class NotasService {
   Database? _db;
 
+  List<DatabaseNota> _notas = [];
+
+  // Implementación de Singleton para la clase de servicio de notas (NotasService)
+  static final NotasService _shared = NotasService._sharedInstance();
+  NotasService._sharedInstance();
+  factory NotasService() => _shared;
+
+  // El StreamController es una interfaz entre la caché, que en este caso es
+  // la variabble _notas y el mundo exterior.  La UI estará al pendiente de los
+  // cambios en el StreamController.
+  final _notasStreamController =
+      StreamController<List<DatabaseNota>>.broadcast();
+
+  // Para obtener todas las notas
+  Stream<List<DatabaseNota>> get todasNotas => _notasStreamController.stream;
+
+  Future<DatabaseUser> obtenerCrearUser({required String email}) async {
+    try {
+      final user = await obtenerUser(email: email);
+      return user;
+    } on UsuarioNoEncontradoException {
+      final usuarioCreado = await crearUser(email: email);
+      return usuarioCreado;
+    } catch (e) {
+      // Este bloque de re-throw de una excepción se colocó aqui porque facilita
+      // el debugging en caso de que al crear un usuario se lance una excepción,
+      // la cual es re-lanzada a la función que hizo la invocación de esta misma
+      // función.
+      rethrow;
+    }
+  }
+
+  Future<void> _cacheNotas() async {
+    final todasNotas = await listarNotas();
+    _notas = todasNotas.toList();
+
+    _notasStreamController.add(_notas);
+  }
+
   Future<DatabaseNota> actualizarNota({
     required DatabaseNota nota,
     required String text,
   }) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     await obtenerNota(id: nota.id);
@@ -49,11 +91,18 @@ class NotasService {
     if (countUpdates == 0) {
       throw ImposibleActualizarNotaExcepcion();
     } else {
-      return await obtenerNota(id: nota.id);
+      final notaActualizada = await obtenerNota(id: nota.id);
+
+      // Actualizar la cache
+      _notas.removeWhere((nota) => nota.id == notaActualizada.id);
+      _notas.add(notaActualizada);
+      _notasStreamController.add(_notas);
+      return notaActualizada;
     }
   }
 
   Future<Iterable<DatabaseNota>> listarNotas() async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     final notas = await db.query(notasTable);
@@ -62,6 +111,7 @@ class NotasService {
   }
 
   Future<DatabaseNota> obtenerNota({required int id}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     final notas = await db.query(
@@ -74,17 +124,31 @@ class NotasService {
     if (notas.isEmpty) {
       throw NotaNoEncontradaException();
     } else {
-      return DatabaseNota.fromRow(notas.first);
+      final nota = DatabaseNota.fromRow(notas.first);
+
+      // Actualizar la caché del StreamController
+      _notas.removeWhere((nota) => nota.id == id);
+      _notas.add(nota);
+
+      _notasStreamController.add(_notas);
+
+      return nota;
     }
   }
 
   Future<int> eliminarTodasNotas() async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
-    return await db.delete(notasTable);
+    final cantidadEliminadas = await db.delete(notasTable);
+
+    _notas = [];
+    _notasStreamController.add(_notas);
+    return cantidadEliminadas;
   }
 
   Future<void> eliminarNota({required int id}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     final deletedCount = await db.delete(
@@ -95,10 +159,15 @@ class NotasService {
 
     if (deletedCount == 0) {
       throw ImposibleEliminarNotaException();
+    } else {
+      // Actualizar la caché al eliminar una nota
+      _notas.removeWhere((nota) => nota.id == id);
+      _notasStreamController.add(_notas);
     }
   }
 
   Future<DatabaseNota> crearNota({required DatabaseUser owner}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     // con esto se asegura que el usuario existe en la base de datos con el ID
@@ -123,10 +192,15 @@ class NotasService {
       isSyncedWithCloud: true,
     );
 
+    // Actualizar la caché en el StreamController.
+    _notas.add(nota);
+    _notasStreamController.add(_notas);
+
     return nota;
   }
 
   Future<DatabaseUser> obtenerUser({required String email}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
 
     final results = await db.query(
@@ -144,6 +218,7 @@ class NotasService {
   }
 
   Future<DatabaseUser> crearUser({required String email}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
     final results = await db.query(
       userTable,
@@ -163,6 +238,7 @@ class NotasService {
   }
 
   Future<void> eliminarUser({required String email}) async {
+    await _asegurarDBAbierta();
     final db = _getDatabaseOrThrow();
     final deletedCount = await db.delete(
       userTable,
@@ -216,9 +292,18 @@ class NotasService {
       await db.execute(crearUserTableSql);
       // Crear la tabla de notas.
       await db.execute(crearNotaTableSql);
+
+      // Cachear todas las notas que estén en la db.
+      await _cacheNotas();
     } on MissingPlatformDirectoryException {
       throw ImposibleObtenerDirectorioDocumentosException();
     }
+  }
+
+  Future<void> _asegurarDBAbierta() async {
+    try {
+      await abrirDb();
+    } on DatabaseAbiertaException {}
   }
 }
 
