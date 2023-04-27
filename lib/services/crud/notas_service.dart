@@ -95,10 +95,15 @@ class NotasService {
 
     await obtenerNota(id: nota.id);
 
-    final countUpdates = await db.update(notasTable, {
-      textoColumn: text,
-      isSyncedWithCloudColumn: 0,
-    });
+    final countUpdates = await db.update(
+      notasTable,
+      {
+        textoColumn: text,
+        isSyncedWithCloudColumn: 0,
+      },
+      where: 'id = ?',
+      whereArgs: [nota.id],
+    );
 
     if (countUpdates == 0) {
       throw ImposibleActualizarNotaExcepcion();

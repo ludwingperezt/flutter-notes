@@ -112,6 +112,10 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
         title: const Text('Nueva nota'),
       ),
       body: FutureBuilder(
+        // En esta parte se usa un futureBuilder porque al abrir la view
+        // lo que se hace es insertar una nueva nota en la db si no se recibió
+        // una nota como parámetro, de lo contrario se manda a traer a la db
+        // la nota que ya existe.
         future: crearObtenerNota(contexto),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
