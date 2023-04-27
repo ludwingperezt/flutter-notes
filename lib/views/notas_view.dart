@@ -110,14 +110,11 @@ class _NotasViewState extends State<NotasView> {
                     // case ConnectionState.none:
                     //   // TODO: Handle this case.
                     //   break;
+                    // Cuando dos condiciones case están juntas significa que
+                    // la acción que realizan es la misma:
+                    case ConnectionState.active:
                     case ConnectionState.waiting:
                       return const Text('Esperando cargar todas las notas...');
-                      // case ConnectionState.active:
-                      //   // TODO: Handle this case.
-                      //   break;
-                      // case ConnectionState.done:
-                      //   // TODO: Handle this case.
-                      break;
                     default:
                       return const CircularProgressIndicator();
                   }
