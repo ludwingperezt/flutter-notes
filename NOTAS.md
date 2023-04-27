@@ -84,3 +84,23 @@ flutter test <path del archivo de tests a ejecutar>
 ## Dependencias para manejar base de datos SQLite
 
 flutter pub add sqflite path_provider path
+
+## StreamController
+
+Se usa un StreamController para mantener una caché de datos en memoria la cual
+es la fuente de verdad de datos para la UI.  Cuando hay un cambio en los datos,
+se actualiza la DB y también se actualiza el StreamController, y la UI al ser
+notificada de cambios en el StreamController se actualiza también.
+
+El StreamController necesita un objeto subyacente para funcionar, por ejemplo
+en el caso de listas de elementos, el objeto subyacente puede ser una lista
+o un iterable.
+
+## FutureBuilder y AsyncSnapshot
+
+FutureBuilder es un StatefulWidget que enlaza la lógica con la UI. Permite 
+ejecutar la construcción de widgets mientras se recibe la respuesta de un Future
+al cual se suscribe.
+
+AsyncSnapshot envuelve una funcionalidad asíncrona y permite recibir 
+actualizaciones.
