@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
+import 'package:mynotes/dialogs/logout_dialog.dart';
 import 'package:mynotes/dialogs/show_confirmar_logout_dialog.dart';
 import 'package:mynotes/enums/menu_action.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/crud/notas_service.dart';
+import 'package:mynotes/views/notas/list_view.dart';
 
 class NotasView extends StatefulWidget {
   const NotasView({super.key});
@@ -111,25 +113,14 @@ class _NotasViewState extends State<NotasView> {
                       if (snapshot.hasData) {
                         final todasNotas = snapshot.data as List<DatabaseNota>;
 
-                        return ListView.builder(
-                          itemCount: todasNotas.length,
-                          itemBuilder: (context, index) {
-                            // obtener cada nota en la lista según su índice
-                            final nota = todasNotas[index];
-
-                            // ListTile representa a cada uno de los elementos
-                            // de la lista. Cada uno de estos elementos mostrará
-                            // una parte del texto (si es muy largo) y será
-                            // recortado a una línea con puntos suspensivos
-                            // al final de la línea.
-                            return ListTile(
-                              title: Text(
-                                nota.texto,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
+                        // En este punto el listview de las notas se envió a un
+                        // archivo aparte el cual define un callback para cuando
+                        // se quiera eliminar una nota haciendo clic en el botón
+                        // del ícono de basura al lado derecho de la nota.
+                        return NotasListView(
+                          notas: todasNotas,
+                          onEliminarNota: (nota) async {
+                            await _notasService.eliminarNota(id: nota.id);
                           },
                         );
                       } else {
