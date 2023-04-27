@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/dialogs/delete_dialog.dart';
 import 'package:mynotes/services/crud/notas_service.dart';
 
-typedef EliminarNotaCallback = void Function(DatabaseNota nota);
+typedef NotaCallback = void Function(DatabaseNota nota);
 
 class NotasListView extends StatelessWidget {
   final List<DatabaseNota> notas;
 
-  final EliminarNotaCallback onEliminarNota;
+  final NotaCallback onEliminarNota;
+
+  final NotaCallback onTap;
 
   const NotasListView({
     super.key,
     required this.notas,
     required this.onEliminarNota,
+    required this.onTap,
   });
 
   @override
@@ -29,6 +32,11 @@ class NotasListView extends StatelessWidget {
         // recortado a una línea con puntos suspensivos
         // al final de la línea.
         return ListTile(
+          onTap: () {
+            // Cuando el usuario haga clic sobre una nota, ejecutar el callback
+            // onTap()
+            onTap(nota);
+          },
           title: Text(
             nota.texto,
             maxLines: 1,

@@ -36,7 +36,7 @@ class _NotasViewState extends State<NotasView> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(nuevaNotaRoute);
+              Navigator.of(context).pushNamed(nuevaEditarNotaRoute);
             },
             icon: const Icon(Icons.add),
           ),
@@ -121,6 +121,12 @@ class _NotasViewState extends State<NotasView> {
                           notas: todasNotas,
                           onEliminarNota: (nota) async {
                             await _notasService.eliminarNota(id: nota.id);
+                          },
+                          onTap: (nota) {
+                            Navigator.of(context).pushNamed(
+                              nuevaEditarNotaRoute,
+                              arguments: nota,
+                            );
                           },
                         );
                       } else {

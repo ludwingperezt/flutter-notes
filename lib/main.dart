@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/views/inicio_view.dart';
 import 'package:mynotes/views/login_view.dart';
-import 'package:mynotes/views/notas/nueva_nota_view.dart';
+import 'package:mynotes/views/notas/crear_editar_nota_view.dart';
 import 'package:mynotes/views/notas_view.dart';
 import 'package:mynotes/views/registro_view.dart';
 import 'package:mynotes/views/verificar_email_view.dart';
@@ -41,7 +41,7 @@ void main() async {
         registroRoute: (context) => const RegistroView(),
         notasRoute: (context) => const NotasView(),
         verificarEmailRoute: (context) => const VerificarEmailView(),
-        nuevaNotaRoute: (context) => const NuevaNotaView(),
+        nuevaEditarNotaRoute: (context) => const CrearEditarNotaView(),
       },
     ),
   );
