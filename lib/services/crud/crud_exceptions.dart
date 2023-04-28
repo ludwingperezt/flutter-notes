@@ -15,3 +15,5 @@ class ImposibleEliminarNotaException implements Exception {}
 class NotaNoEncontradaException implements Exception {}
 
 class ImposibleActualizarNotaExcepcion implements Exception {}
+
+class UsuarioDebeExistirParaObtenerNotasException implements Exception {}

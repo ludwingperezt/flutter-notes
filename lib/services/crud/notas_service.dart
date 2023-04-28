@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:mynotes/extensions/list/filter.dart';
 import 'package:mynotes/services/crud/crud_exceptions.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -37,13 +38,16 @@ class NotasService {
 
   List<DatabaseNota> _notas = [];
 
+  DatabaseUser? _user;
+
   // Implementación de Singleton para la clase de servicio de notas (NotasService)
   static final NotasService _shared = NotasService._sharedInstance();
   NotasService._sharedInstance() {
     _notasStreamController = StreamController<List<DatabaseNota>>.broadcast(
       onListen: () {
         // Este callback se llamará cada vez que se suscriba un nuevo listener
-        // a este stream.
+        // a este stream, y así enviarle a ese nuevo subscriber el estado actual
+        // de los datos en caché
         _notasStreamController.sink.add(_notas);
       },
     );
@@ -58,17 +62,37 @@ class NotasService {
   // que se presenta una actualización, por esa razón la inicialización se hace
   // en el constructor.
   late final StreamController<List<DatabaseNota>> _notasStreamController;
-  //
 
-  // Para obtener todas las notas
-  Stream<List<DatabaseNota>> get todasNotas => _notasStreamController.stream;
+  // Para obtener todas las notas filtradas según el usuario actual
+  Stream<List<DatabaseNota>> get todasNotas =>
+      // aqui se usa el filtro creado en lib/extensions/list/filter.dart
+      _notasStreamController.stream.filter((nota) {
+        final currentUser = _user;
+        if (currentUser != null) {
+          return nota.userId == currentUser.id;
+        } else {
+          throw UsuarioDebeExistirParaObtenerNotasException();
+        }
+      });
 
-  Future<DatabaseUser> obtenerCrearUser({required String email}) async {
+  Future<DatabaseUser> obtenerCrearUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     try {
       final user = await obtenerUser(email: email);
+
+      if (setAsCurrentUser) {
+        _user = user;
+      }
+
       return user;
     } on UsuarioNoEncontradoException {
       final usuarioCreado = await crearUser(email: email);
+
+      if (setAsCurrentUser) {
+        _user = usuarioCreado;
+      }
       return usuarioCreado;
     } catch (e) {
       // Este bloque de re-throw de una excepción se colocó aqui porque facilita
