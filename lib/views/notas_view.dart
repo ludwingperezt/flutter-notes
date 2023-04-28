@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/dialogs/logout_dialog.dart';
-import 'package:mynotes/dialogs/show_confirmar_logout_dialog.dart';
 import 'package:mynotes/enums/menu_action.dart';
 import 'dart:developer' as devtools show log;
 
@@ -18,7 +17,7 @@ class NotasView extends StatefulWidget {
 
 class _NotasViewState extends State<NotasView> {
   // Exponer el email del usuario loggeado
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+  String get userEmail => AuthService.firebase().currentUser!.email;
 
   late final NotasService _notasService;
 

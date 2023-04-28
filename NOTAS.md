@@ -104,3 +104,25 @@ al cual se suscribe.
 
 AsyncSnapshot envuelve una funcionalidad asíncrona y permite recibir 
 actualizaciones.
+
+# Configurar Firestore
+
+[Configuración de Firestore](https://youtu.be/VPvVD8t02U8?t=85965)
+
+Reglas provisionales de permisos para la base de datos firestore (Esta regla
+no es muy segura porque da acceso a toda la base de datos a cualquier usuario
+que esté loggeado):
+```  
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```  
+
+[Acerca de las colecciones](https://youtu.be/VPvVD8t02U8?t=86428)
+
+[Documentos y colecciones](https://youtu.be/VPvVD8t02U8?t=86635)

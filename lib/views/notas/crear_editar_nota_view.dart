@@ -42,7 +42,7 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
     }
 
     final usuarioActual = AuthService.firebase().currentUser;
-    final email = usuarioActual!.email ?? '';
+    final email = usuarioActual!.email;
     final owner = await _notasService.obtenerUser(email: email);
     final nuevaNota = await _notasService.crearNota(owner: owner);
     _nota = nuevaNota;
