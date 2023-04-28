@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mynotes/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:mynotes/utilities/generics/get_arguments.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CrearEditarNotaView extends StatefulWidget {
   const CrearEditarNotaView({super.key});
@@ -108,6 +110,20 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nueva nota'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final text = _textController.text;
+              if (_nota == null || text.isEmpty) {
+                await showCannotShareEmptyNotaDialog(context);
+              } else {
+                // Aqui es donde se comparte el texto de la nota.
+                Share.share(text);
+              }
+            },
+            icon: const Icon(Icons.share),
+          )
+        ],
       ),
       body: FutureBuilder(
         // En esta parte se usa un futureBuilder porque al abrir la view

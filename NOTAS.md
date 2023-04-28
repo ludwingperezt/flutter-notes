@@ -105,7 +105,7 @@ al cual se suscribe.
 AsyncSnapshot envuelve una funcionalidad asíncrona y permite recibir 
 actualizaciones.
 
-# Configurar Firestore
+## Configurar Firestore
 
 [Configuración de Firestore](https://youtu.be/VPvVD8t02U8?t=85965)
 
@@ -126,3 +126,20 @@ service cloud.firestore {
 [Acerca de las colecciones](https://youtu.be/VPvVD8t02U8?t=86428)
 
 [Documentos y colecciones](https://youtu.be/VPvVD8t02U8?t=86635)
+
+## Compartir notas con otros usuarios
+
+El plugin share-plus extiende la funcionalidad de flutter. Lo que hace es permitir
+compartir contenido desde la app (hecha en flutter) a través del dialog
+de compartir de la plataforma nativa.
+
+flutter pub add share_plus
+
+* Luego de agregar un nuevo plugin al proyecto se recomienda hacer un clean and
+  rebuild, ya que flutter usa CocoaPods para manejar iOS dependencies y algunas
+  veces no reconoce las nuevas dependencias (para android no suele ser un 
+  problema pero igual se recomienda hacerlo):
+
+  flutter clean
+  flutter clean android
+  flutter pub get
