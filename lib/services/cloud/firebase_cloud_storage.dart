@@ -18,12 +18,18 @@ class FirebaseCloudStorage {
   // y final que a su vez llama al constructor privado de la clase.
   factory FirebaseCloudStorage() => _shared;
 
-  void crearNuevaNota({required String ownerUserId}) async {
+  Future<CloudNota> crearNota({required String ownerUserId}) async {
     // Al crear una nota, ésta se crea vacía.
-    await notas.add({
+    final document = await notas.add({
       ownerUserIdFieldName: ownerUserId,
       textoFieldName: '',
     });
+
+    // Al guardar una nota con .add no se retorna el snapshot con los datos creados
+    // sino que para obtenerlo hay que llamarlo con .get()
+    final fetchedNota = await document.get();
+    return CloudNota(
+        documentId: fetchedNota.id, ownerUserId: ownerUserId, texto: '');
   }
 
   Future<Iterable<CloudNota>> obtenerNotas(
@@ -39,15 +45,7 @@ class FirebaseCloudStorage {
           .get()
           .then(
             (value) => value.docs.map(
-              (document) {
-                // Aquí se mapea de los datos del snapshot de firebase a objetos
-                // de tipo CloudNota
-                return CloudNota(
-                  documentId: document.id,
-                  ownerUserId: document.data()[ownerUserIdFieldName] as String,
-                  texto: document.data()[textoFieldName] as String,
-                );
-              },
+              (document) => CloudNota.fromSnapshot(document),
             ),
           );
     } catch (e) {

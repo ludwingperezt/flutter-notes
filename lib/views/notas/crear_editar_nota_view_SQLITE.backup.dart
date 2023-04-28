@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
+import 'package:mynotes/services/crud/notas_service.dart';
 import 'package:mynotes/utilities/generics/get_arguments.dart';
-import 'package:mynotes/services/cloud/cloud_note.dart';
 
 class CrearEditarNotaView extends StatefulWidget {
   const CrearEditarNotaView({super.key});
@@ -17,19 +16,19 @@ class CrearEditarNotaView extends StatefulWidget {
 /// Al salir de la vista (haciendo clic en el botón atrás), si el texto está
 /// vacío, la nueva nota se elimina, de lo contrario se actualiza una vez más.
 class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
-  CloudNota? _nota;
+  DatabaseNota? _nota;
 
-  late final FirebaseCloudStorage _notasService;
+  late final NotasService _notasService;
 
   // Una buena práctica para el uso de un TextEditingController es SIEMPRE
   // hacer un dispose de este elemento cuando se hace el dispose de la view.
   late final TextEditingController _textController;
 
-  Future<CloudNota> crearObtenerNota(BuildContext contexto) async {
+  Future<DatabaseNota> crearObtenerNota(BuildContext contexto) async {
     // Aquí se hace uso del extension ObtenerArgument agregado a la clase
     // BuildContext para obtener el parámetro que pudo ser enviado o no desde
     // el punto donde se hizo el llamado a esta vista.
-    final widgetNota = context.obtenerArgument<CloudNota>();
+    final widgetNota = context.obtenerArgument<DatabaseNota>();
 
     if (widgetNota != null) {
       _nota = widgetNota;
@@ -43,8 +42,9 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
     }
 
     final usuarioActual = AuthService.firebase().currentUser;
-    final userId = usuarioActual!.id;
-    final nuevaNota = await _notasService.crearNota(ownerUserId: userId);
+    final email = usuarioActual!.email;
+    final owner = await _notasService.obtenerUser(email: email);
+    final nuevaNota = await _notasService.crearNota(owner: owner);
     _nota = nuevaNota;
     return nuevaNota;
   }
@@ -54,7 +54,7 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
     final nota = _nota;
 
     if (_textController.text.isEmpty && nota != null) {
-      _notasService.eliminarNota(documentId: nota.documentId);
+      _notasService.eliminarNota(id: nota.id);
     }
   }
 
@@ -65,7 +65,9 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
 
     if (nota != null && texto.isNotEmpty) {
       await _notasService.actualizarNota(
-          documentId: nota.documentId, texto: texto);
+        nota: nota,
+        text: texto,
+      );
     }
   }
 
@@ -78,8 +80,8 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
 
     final texto = _textController.text;
     await _notasService.actualizarNota(
-      documentId: nota.documentId,
-      texto: texto,
+      nota: nota,
+      text: texto,
     );
   }
 
@@ -90,7 +92,7 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
 
   @override
   void initState() {
-    _notasService = FirebaseCloudStorage();
+    _notasService = NotasService();
     _textController = TextEditingController();
     super.initState();
   }

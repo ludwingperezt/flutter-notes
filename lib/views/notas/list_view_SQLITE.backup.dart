@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/dialogs/delete_dialog.dart';
-import 'package:mynotes/services/cloud/cloud_note.dart';
+import 'package:mynotes/services/crud/notas_service.dart';
 
-typedef NotaCallback = void Function(CloudNota nota);
+typedef NotaCallback = void Function(DatabaseNota nota);
 
 class NotasListView extends StatelessWidget {
-  final Iterable<CloudNota> notas;
+  final List<DatabaseNota> notas;
 
   final NotaCallback onEliminarNota;
 
@@ -24,8 +24,7 @@ class NotasListView extends StatelessWidget {
       itemCount: notas.length,
       itemBuilder: (context, index) {
         // obtener cada nota en la lista según su índice
-        //final nota = notas[index];
-        final nota = notas.elementAt(index);
+        final nota = notas[index];
 
         // ListTile representa a cada uno de los elementos
         // de la lista. Cada uno de estos elementos mostrará
