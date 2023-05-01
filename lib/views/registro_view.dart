@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mynotes/constants/routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/dialogs/error_dialog.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
-import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
+import 'package:mynotes/services/auth/bloc/auth_state.dart';
 
 // Widget para registro de nuevos usuarios.
 class RegistroView extends StatefulWidget {
@@ -39,85 +41,85 @@ class _RegistroViewState extends State<RegistroView> {
     // El widget Column se usa para apilar componentes, en este caso
     // se apilan los campos de usuario, contraseña y botón de registro
     // en una sola columna.
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registro'),
-      ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _email,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              hintText: 'Ingrese su email',
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        // Manejar aquí las excepciones que se pueden presentar cuando se
+        // hace el proceso de registro.
+
+        if (state is AuthStateRegistering) {
+          if (state.exception is WeakPasswordAuthException) {
+            await mostrarErrorDialog(
+              context,
+              'Contraseña debil',
+            );
+          } else if (state.exception is EmailAlreadyInUseAuthException) {
+            await mostrarErrorDialog(
+              context,
+              'Email en uso',
+            );
+          } else if (state.exception is InvalidEmailAuthException) {
+            await mostrarErrorDialog(
+              context,
+              'Email no válido',
+            );
+          } else if (state.exception is GenericAuthException) {
+            await mostrarErrorDialog(
+              context,
+              'Fallo al registrar usuario',
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Registro'),
+        ),
+        body: Column(
+          children: [
+            TextField(
+              controller: _email,
+              enableSuggestions: false,
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                hintText: 'Ingrese su email',
+              ),
             ),
-          ),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'Ingrese su contraseña',
+            TextField(
+              controller: _password,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                hintText: 'Ingrese su contraseña',
+              ),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              // Aqui vamos a crear el usuario en firebase.
-              final email = _email.text;
-              final password = _password.text;
+            TextButton(
+              onPressed: () async {
+                // Aqui vamos a crear el usuario en firebase.
+                final email = _email.text;
+                final password = _password.text;
 
-              try {
-                await AuthService.firebase().crearUsuario(
-                  email: email,
-                  password: password,
-                );
-
-                await AuthService.firebase().enviarEmailVerificacion();
-
-                // En este caso se usa pushNamed y no pushNamedAndRemoveUntil
-                // porque no queremos que las vistas anteriores sean destruidas
-                // en caso de que el usuario quiera retornar a la vista de registro
-                // y corregir datos.
-                if (context.mounted) {
-                  Navigator.of(context).pushNamed(verificarEmailRoute);
-                }
-              } on WeakPasswordAuthException {
-                await mostrarErrorDialog(
-                  context,
-                  'Contraseña debil',
-                );
-              } on EmailAlreadyInUseAuthException {
-                await mostrarErrorDialog(
-                  context,
-                  'Email en uso',
-                );
-              } on InvalidEmailAuthException {
-                await mostrarErrorDialog(
-                  context,
-                  'Email no válido',
-                );
-              } on GenericAuthException {
-                await mostrarErrorDialog(
-                  context,
-                  'Fallo al registrar usuario',
-                );
-              }
-            },
-            child: const Text('Registrarse'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                loginRoute,
-                (route) => false,
-              );
-            },
-            child: const Text('Ya te has registrado? Login aqui!'),
-          )
-        ],
+                // Desencadenar el evento de Registro pero a través de AuthBloc
+                context.read()<AuthBloc>().add(
+                      AuthEventRegister(
+                        email,
+                        password,
+                      ),
+                    );
+              },
+              child: const Text('Registrarse'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Al hacer clic en este botón se debe mostrar la pantalla de login
+                // y eso se puede hacer enviando el evento de logout al AuthBloc
+                context.read()<AuthBloc>().add(const AuthEventLogOut());
+              },
+              child: const Text('Ya te has registrado? Login aqui!'),
+            )
+          ],
+        ),
       ),
     );
   }
