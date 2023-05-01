@@ -93,5 +93,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
     );
+
+    // Cuando el usuario quiere registrarse desde login
+    on<AuthEventShouldRegister>(
+      (event, emit) {
+        emit(const AuthStateRegistering(null));
+      },
+    );
   }
 }

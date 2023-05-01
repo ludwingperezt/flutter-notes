@@ -5,11 +5,7 @@ import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/firebase_auth_provider.dart';
 import 'package:mynotes/views/inicio_view.dart';
-import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notas/crear_editar_nota_view.dart';
-import 'package:mynotes/views/notas_view.dart';
-import 'package:mynotes/views/registro_view.dart';
-import 'package:mynotes/views/verificar_email_view.dart';
 
 /// La función main() NO ES INVOCADA durante los hot reloads.
 void main() async {
@@ -48,10 +44,11 @@ void main() async {
       ),
       // Creación de las rutas de la app:
       routes: {
-        loginRoute: (context) => const LoginView(),
-        registroRoute: (context) => const RegistroView(),
-        notasRoute: (context) => const NotasView(),
-        verificarEmailRoute: (context) => const VerificarEmailView(),
+        // Las rutas se comentan porque se manejan a través de AuthBloc
+        // loginRoute: (context) => const LoginView(),
+        // registroRoute: (context) => const RegistroView(),
+        // notasRoute: (context) => const NotasView(),
+        // verificarEmailRoute: (context) => const VerificarEmailView(),
         nuevaEditarNotaRoute: (context) => const CrearEditarNotaView(),
       },
     ),

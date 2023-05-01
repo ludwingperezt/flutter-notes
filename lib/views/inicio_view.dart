@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notas_view.dart';
+import 'package:mynotes/views/registro_view.dart';
 import 'package:mynotes/views/verificar_email_view.dart';
 
 class InicioView extends StatelessWidget {
@@ -34,6 +34,8 @@ class InicioView extends StatelessWidget {
           return const VerificarEmailView();
         } else if (state is AuthStateLoggedOut) {
           return const LoginView();
+        } else if (state is AuthStateRegistering) {
+          return const RegistroView();
         } else {
           return const Scaffold(
             body: CircularProgressIndicator(),
