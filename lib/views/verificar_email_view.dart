@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
 
 class VerificarEmailView extends StatefulWidget {
   const VerificarEmailView({super.key});
@@ -23,21 +26,18 @@ class _VerificarEmailViewState extends State<VerificarEmailView> {
         const Text(
             'Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo'),
         TextButton(
-          onPressed: () async {
-            await AuthService.firebase().enviarEmailVerificacion();
+          onPressed: () {
+            context.read()<AuthBloc>().add(
+                  const AuthEventSendEmailVerification(),
+                );
           },
           child: const Text('Enviar email de vefificación'),
         ),
         TextButton(
-          onPressed: () async {
-            try {
-              await AuthService.firebase().cerrarSesion();
-            } on UserNotLoggedInAuthException {}
-
-            if (context.mounted) {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(registroRoute, (route) => false);
-            }
+          onPressed: () {
+            context.read()<AuthBloc>().add(
+                  const AuthEventLogOut(),
+                );
           },
           child: const Text('Reiniciar'),
         )
