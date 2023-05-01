@@ -169,9 +169,28 @@ Bloc se divide en dos:
 
 * BlocBuilder: Usa los cambios del estado de bloc para generar Widgets.
 
-* BlocConsumer: Combina BlocListener y un BlocBuilder
-
-
+* BlocConsumer: Combina BlocListener y un BlocBuilder. Permite hacer ambas cosas
+  al mismo tiempo.
 
 ** Las clases que deriven de una clase abstracta y que tengan constructor const,
    la clase abstracta también deberá tener un constructor const.
+
+### Equality
+
+En algunos casos como en el estado AuthStateLoggedOut aunque de manera externa
+el estado puede ser el mismo, de manera interna no siempre es el caso, ya que
+una misma instancia de la misma clase puede representar distintas cosas en base
+a los valores de las variables que tiene instanciadas.
+
+Para hacer esa diferenciación se utiliza la librería equatable:
+
+flutter pub add equatable
+
+## Overlays
+
+Son pantallas o componentes que se muestran sobre cualquier pantalla que esté
+visible, independientemente de la pila de navegación (la pila de navegación
+es una especie de historial en la cual se van apilando las pantallas o views
+que el usuario va viendo). 
+
+Por lo regular se usan para mostrar loading screens.

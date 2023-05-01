@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynotes/helpers/loading/loading_screen.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
@@ -26,7 +27,21 @@ class InicioView extends StatelessWidget {
 
     // En este bloque se decide qué vista se hará render dependiendo del estado
     // que resulte de algún evento.
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      // Debido a que en este punto es que se necesita mostrar u ocultar el dialog
+      // de cargando, es necesario usar un BlocConsumer que combina un BlocListener
+      // para reaccionar a cualquier cambio de estado que implique que se debe
+      // mostrar u ocultar un diálogo de carga; y también un BlocBuilder para
+      // mostrar la pantalla correspondiente según el estado.
+      listener: (context, state) {
+        if (state.isLoading) {
+          LoadingScreen().show(
+              context: context,
+              text: state.loadingText ?? 'Por favor, espera un momento...');
+        } else {
+          LoadingScreen().hide();
+        }
+      },
       builder: (context, state) {
         if (state is AuthStateLoggedIn) {
           return const NotasView();
