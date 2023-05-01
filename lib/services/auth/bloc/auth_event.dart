@@ -20,3 +20,21 @@ class AuthEventLogIn extends AuthEvent {
 class AuthEventLogOut extends AuthEvent {
   const AuthEventLogOut();
 }
+
+/// Evento para disparar el envío del email de verificación.
+class AuthEventSendEmailVerification extends AuthEvent {
+  const AuthEventSendEmailVerification();
+}
+
+/// Evento para registrar un nuevo usuario
+class AuthEventRegister extends AuthEvent {
+  final String email;
+  final String password;
+
+  const AuthEventRegister(this.email, this.password);
+}
+
+// Inicio para desencadenar el registro de un usuario nuevo.
+class AuthEventShouldRegister extends AuthEvent {
+  const AuthEventShouldRegister();
+}
