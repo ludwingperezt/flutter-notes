@@ -19,20 +19,13 @@ class AuthStateLoggedIn extends AuthState {
   const AuthStateLoggedIn(this.user);
 }
 
-/// Si un usuario no pudo iniciar sesión es necesario saber por qué, por ello se
-/// agrega la excepción entre los datos del estado.
-class AuthStateLoginFailure extends AuthState {
-  final Exception exception;
-
-  const AuthStateLoginFailure(this.exception);
-}
-
 class AuthStateNeedsVerification extends AuthState {
   const AuthStateNeedsVerification();
 }
 
 class AuthStateLoggedOut extends AuthState {
-  const AuthStateLoggedOut();
+  final Exception? exception;
+  const AuthStateLoggedOut(this.exception);
 }
 
 class AuthStateLogoutFailure extends AuthState {

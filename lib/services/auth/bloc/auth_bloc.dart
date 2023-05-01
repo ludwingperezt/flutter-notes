@@ -12,7 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final user = provider.currentUser;
 
       if (user == null) {
-        emit(const AuthStateLoggedOut());
+        emit(const AuthStateLoggedOut(null));
       } else if (!user.isEmailVerified) {
         emit(const AuthStateNeedsVerification());
       } else {
@@ -22,8 +22,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // Evento de login
     on<AuthEventLogIn>((event, emit) async {
-      emit(const AuthStateLoading());
-
       final email = event.email;
       final password = event.password;
 
@@ -35,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // en dart cualquier objeto puede ser lanzado como una excepción, pero
         // el estado AuthStateLoginFailure solo acepta objetos que sean derivados
         // de Exception.
-        emit(AuthStateLoginFailure(e));
+        emit(AuthStateLoggedOut(e));
       }
     });
 
@@ -44,7 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         emit(const AuthStateLoading());
         await provider.cerrarSesion();
-        emit(const AuthStateLoggedOut());
+        emit(const AuthStateLoggedOut(null));
       } on Exception catch (e) {
         emit(AuthStateLogoutFailure(e));
       }

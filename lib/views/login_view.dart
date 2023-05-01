@@ -9,6 +9,7 @@ import 'package:mynotes/dialogs/error_dialog.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
+import 'package:mynotes/services/auth/bloc/auth_state.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -66,35 +67,41 @@ class _LoginViewState extends State<LoginView> {
               hintText: 'Ingrese su contraseña',
             ),
           ),
-          TextButton(
-            onPressed: () async {
-              // Aqui vamos a crear el usuario en firebase.
-              final email = _email.text;
-              final password = _password.text;
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) async {
+              // Aqui se manejan las excepciones
 
-              // TODO: Por el momento el manejo de excepciones ya no funciona aquí.
-              try {
-                context.read<AuthBloc>().add(AuthEventLogIn(email, password));
-              } on UserNotFoundAuthException {
-                await mostrarErrorDialog(
-                  context,
-                  'Usuario no encontrado',
-                );
-              } on WrongPasswordAuthException {
-                devtools.log('Contraseña incorrecta');
-                await mostrarErrorDialog(
-                  context,
-                  'Credenciales no válidas',
-                );
-              } on GenericAuthException {
-                // devtools.log(e.toString());
-                await mostrarErrorDialog(
-                  context,
-                  'Error de autenticación',
-                );
+              if (state is AuthStateLoggedOut) {
+                if (state.exception is UserNotFoundAuthException) {
+                  await mostrarErrorDialog(
+                    context,
+                    'Usuario no encontrado',
+                  );
+                } else if (state.exception is WrongPasswordAuthException) {
+                  await mostrarErrorDialog(
+                    context,
+                    'Credenciales no válidas',
+                  );
+                } else if (state.exception is GenericAuthException) {
+                  await mostrarErrorDialog(
+                    context,
+                    'Error de autenticación',
+                  );
+                }
               }
             },
-            child: const Text('Ingresar'),
+            child: TextButton(
+              onPressed: () async {
+                // Aqui vamos a crear el usuario en firebase.
+                final email = _email.text;
+                final password = _password.text;
+
+                // Aqui sucede el evento de login el cual es enviado a AuthBloc
+                // para que genere un estado consecuente con ese evento.
+                context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+              },
+              child: const Text('Ingresar'),
+            ),
           ),
           TextButton(
             onPressed: () {

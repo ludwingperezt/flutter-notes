@@ -164,7 +164,8 @@ Bloc se divide en dos:
 
 * BlocProvider: Es una clase que crea una instancia de Bloc.
 
-* BlocListener: Escucha cambios en el estado de bloc.
+* BlocListener: Escucha cambios en el estado de bloc. Ideal para efectos secundarios
+  como mostrar dialogs mientras otras operaciones se realizan.
 
 * BlocBuilder: Usa los cambios del estado de bloc para generar Widgets.
 
