@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'dart:developer' as devtools show log;
 import 'package:mynotes/dialogs/error_dialog.dart';
-import 'package:mynotes/dialogs/loading_dialog.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
@@ -20,7 +19,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  CloseDialog? _closeDialogHandle;
 
   @override
   void initState() {
@@ -48,26 +46,6 @@ class _LoginViewState extends State<LoginView> {
         // Aqui se manejan las excepciones
 
         if (state is AuthStateLoggedOut) {
-          final closeDialog = _closeDialogHandle;
-
-          // Esta condición significa: Si ya no estamos cargando nada, pero
-          // estuvimos cargando antes; entonces lo que se hace es cerrar el dialog
-          // que esté mostrándose.
-          // Si por el contrario, por medio del estado sabemos que la app está
-          // cargando (en espera de algo) y no hay un dialog mostrado, entonces
-          // se muestra.
-          // El retorno de la función para mostrar un diálogo de carga es una
-          // función que sirve para cerrar ese diálogo.
-          if (!state.isLoading && closeDialog != null) {
-            closeDialog();
-            _closeDialogHandle = null;
-          } else if (state.isLoading && closeDialog == null) {
-            _closeDialogHandle = mostrarCargandoDialog(
-              context: context,
-              text: 'Cargando...',
-            );
-          }
-
           if (state.exception is UserNotFoundAuthException) {
             await mostrarErrorDialog(
               context,
