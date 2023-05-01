@@ -5,9 +5,12 @@ import 'package:mynotes/enums/menu_action.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:mynotes/views/notas/list_view.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
 
 class NotasView extends StatefulWidget {
   const NotasView({super.key});
@@ -47,17 +50,11 @@ class _NotasViewState extends State<NotasView> {
                   final debeCerrarSesion = await mostrarLogOutDialog(context);
                   devtools.log(debeCerrarSesion.toString());
 
-                  if (debeCerrarSesion) {
-                    // Hacer logout de Firebase.
-                    await AuthService.firebase().cerrarSesion();
-
-                    // context.mounted resuelve esta advertencia:
-                    // Don't use 'BuildContext's across async gaps. Try rewriting the code to not reference the 'BuildContext'
-                    // https://stackoverflow.com/questions/68871880/do-not-use-buildcontexts-across-async-gaps
-                    if (context.mounted) {
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil(loginRoute, (_) => false);
-                    }
+                  if (debeCerrarSesion && context.mounted) {
+                    // Hacer el cierre de sesión con AuthBloc
+                    context.read<AuthBloc>().add(
+                          const AuthEventLogOut(),
+                        );
                   }
                   break;
               }

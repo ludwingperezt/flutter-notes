@@ -133,6 +133,8 @@ El plugin share-plus extiende la funcionalidad de flutter. Lo que hace es permit
 compartir contenido desde la app (hecha en flutter) a través del dialog
 de compartir de la plataforma nativa.
 
+https://pub.dev/packages/share_plus
+
 flutter pub add share_plus
 
 * Luego de agregar un nuevo plugin al proyecto se recomienda hacer un clean and
@@ -143,3 +145,32 @@ flutter pub add share_plus
   flutter clean
   flutter clean android
   flutter pub get
+
+## Bloc
+
+Es una librería que se usa para separar la presentación de la lógica de negocio.
+
+Bloc se divide en dos:
+* Bloc -- Es la parte que se ocupa de la lógica de negocio
+* flutter_block -- es la parte que se encarga de la presentación, la cual está
+    relacionada con flutter.
+
+### Elementos de Bloc
+
+* Bloc class: Es un contenedor que puede contener eventos que producen estados.
+    La clase bloc comienza con un estado y sus salidas son estados.
+
+            Event -> Bloc -> State
+
+* BlocProvider: Es una clase que crea una instancia de Bloc.
+
+* BlocListener: Escucha cambios en el estado de bloc.
+
+* BlocBuilder: Usa los cambios del estado de bloc para generar Widgets.
+
+* BlocConsumer: Combina BlocListener y un BlocBuilder
+
+
+
+** Las clases que deriven de una clase abstracta y que tengan constructor const,
+   la clase abstracta también deberá tener un constructor const.
