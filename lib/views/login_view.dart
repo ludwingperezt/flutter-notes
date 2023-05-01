@@ -1,12 +1,14 @@
 // Atajo: Para crear un StatelessWidget, solo teclear stl y seleccionar el tipo
 // de widget a crear (Stateless o Stateful)
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/dialogs/error_dialog.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
-import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -70,35 +72,9 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
 
+              // TODO: Por el momento el manejo de excepciones ya no funciona aquí.
               try {
-                final userCredentials = await AuthService.firebase().logIn(
-                  email: email,
-                  password: password,
-                );
-
-                // print(userCredentials);
-                devtools.log(userCredentials.toString());
-
-                final user = AuthService.firebase().currentUser;
-
-                if (user?.isEmailVerified ?? false) {
-                  // Ir a la pantalla principal del usuario loggeado
-                  if (context.mounted) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      notasRoute,
-                      (route) => false,
-                    );
-                  }
-                } else {
-                  if (context.mounted) {
-                    // Si la cuenta no ha verificado su email, entonces
-                    // enviar al usuario a la pantalla de confirmación de email.
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      verificarEmailRoute,
-                      (route) => false,
-                    );
-                  }
-                }
+                context.read<AuthBloc>().add(AuthEventLogIn(email, password));
               } on UserNotFoundAuthException {
                 await mostrarErrorDialog(
                   context,
