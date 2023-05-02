@@ -68,59 +68,65 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           title: const Text('Login'),
         ),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Ingrese su email',
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                  'Por favor, ingresa a tu cuenta para que puedas crear o editar notas.'),
+              TextField(
+                controller: _email,
+                enableSuggestions: false,
+                autocorrect: false,
+                autofocus: true,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Ingrese su email',
+                ),
               ),
-            ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Ingrese su contraseña',
+              TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Ingrese su contraseña',
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Aqui vamos a crear el usuario en firebase.
-                final email = _email.text;
-                final password = _password.text;
+              TextButton(
+                onPressed: () async {
+                  // Aqui vamos a crear el usuario en firebase.
+                  final email = _email.text;
+                  final password = _password.text;
 
-                // Aqui sucede el evento de login el cual es enviado a AuthBloc
-                // para que genere un estado consecuente con ese evento.
-                context.read<AuthBloc>().add(AuthEventLogIn(email, password));
-              },
-              child: const Text('Ingresar'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Aquí se manda a mostrar la view para solicitar la recuperación
-                // de contraseña.
-                context.read<AuthBloc>().add(
-                      const AuthEventForgotPassword(),
-                    );
-              },
-              child: Text('Olvidé mi contraseña'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Aquí se manda a mostrar la view para registrar pero se hace
-                // a través de AuthBloc y no manualmente como estaba antes.
-                context.read<AuthBloc>().add(
-                      const AuthEventShouldRegister(),
-                    );
-              },
-              child: Text('Regístrate aquí!'),
-            ),
-          ],
+                  // Aqui sucede el evento de login el cual es enviado a AuthBloc
+                  // para que genere un estado consecuente con ese evento.
+                  context.read<AuthBloc>().add(AuthEventLogIn(email, password));
+                },
+                child: const Text('Ingresar'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Aquí se manda a mostrar la view para solicitar la recuperación
+                  // de contraseña.
+                  context.read<AuthBloc>().add(
+                        const AuthEventForgotPassword(),
+                      );
+                },
+                child: Text('Olvidé mi contraseña'),
+              ),
+              TextButton(
+                onPressed: () {
+                  // Aquí se manda a mostrar la view para registrar pero se hace
+                  // a través de AuthBloc y no manualmente como estaba antes.
+                  context.read<AuthBloc>().add(
+                        const AuthEventShouldRegister(),
+                      );
+                },
+                child: Text('Regístrate aquí!'),
+              ),
+            ],
+          ),
         ),
       ),
     );
