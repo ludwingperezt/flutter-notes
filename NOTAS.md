@@ -152,16 +152,20 @@ de compartir de la plataforma nativa.
 
 https://pub.dev/packages/share_plus
 
+```  
 flutter pub add share_plus
+```  
 
 * Luego de agregar un nuevo plugin al proyecto se recomienda hacer un clean and
   rebuild, ya que flutter usa CocoaPods para manejar iOS dependencies y algunas
   veces no reconoce las nuevas dependencias (para android no suele ser un 
   problema pero igual se recomienda hacerlo):
 
+```  
   flutter clean
   flutter clean android
   flutter pub get
+```  
 
 ## Bloc
 
@@ -201,7 +205,9 @@ a los valores de las variables que tiene instanciadas.
 
 Para hacer esa diferenciación se utiliza la librería equatable:
 
+```  
 flutter pub add equatable
+```  
 
 ## Overlays
 
@@ -219,7 +225,26 @@ Por lo regular se usan para mostrar loading screens.
 
 Para agregar íconos a la app se usa el plugin flutter_launcher_icons  
 
+```  
 flutter pub add flutter_launcher_icons
+```  
 
 ### Generar los íconos:
+
+```  
 flutter pub run flutter_launcher_icons
+```  
+
+## Tomar capturas de pantalla con adb y emuladores
+
+Se puede usar cualquiera de los dos comandos siguientes: 
+
+```  
+adb exec-out screencap -p > /path/al/archivo/captura.png
+```  
+
+o este otro (-e es para usar conexión TCP/IP):
+
+```  
+adb -e exec-out screencap -p > /path/al/archivo/captura.png
+```  

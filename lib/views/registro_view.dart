@@ -76,61 +76,63 @@ class _RegistroViewState extends State<RegistroView> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // alinear a la izquierda
-            children: [
-              const Text('Crea una cuenta para crear y editar notas'),
-              TextField(
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                autofocus: true,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Ingrese su email',
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start, // alinear a la izquierda
+              children: [
+                const Text('Crea una cuenta para crear y editar notas'),
+                TextField(
+                  controller: _email,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  autofocus: true,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    hintText: 'Ingrese su email',
+                  ),
                 ),
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: const InputDecoration(
-                  hintText: 'Ingrese su contraseña',
+                TextField(
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    hintText: 'Ingrese su contraseña',
+                  ),
                 ),
-              ),
-              Center(
-                child: Column(
-                  children: [
-                    TextButton(
-                      onPressed: () async {
-                        // Aqui vamos a crear el usuario en firebase.
-                        final email = _email.text;
-                        final password = _password.text;
+                Center(
+                  child: Column(
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          // Aqui vamos a crear el usuario en firebase.
+                          final email = _email.text;
+                          final password = _password.text;
 
-                        // Desencadenar el evento de Registro pero a través de AuthBloc
-                        context.read<AuthBloc>().add(
-                              AuthEventRegister(
-                                email,
-                                password,
-                              ),
-                            );
-                      },
-                      child: const Text('Registrarse'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        // Al hacer clic en este botón se debe mostrar la pantalla de login
-                        // y eso se puede hacer enviando el evento de logout al AuthBloc
-                        context.read<AuthBloc>().add(const AuthEventLogOut());
-                      },
-                      child: const Text('Ya te has registrado? Login aqui!'),
-                    ),
-                  ],
+                          // Desencadenar el evento de Registro pero a través de AuthBloc
+                          context.read<AuthBloc>().add(
+                                AuthEventRegister(
+                                  email,
+                                  password,
+                                ),
+                              );
+                        },
+                        child: const Text('Registrarse'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Al hacer clic en este botón se debe mostrar la pantalla de login
+                          // y eso se puede hacer enviando el evento de logout al AuthBloc
+                          context.read<AuthBloc>().add(const AuthEventLogOut());
+                        },
+                        child: const Text('Ya te has registrado? Login aqui!'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

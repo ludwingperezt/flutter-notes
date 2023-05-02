@@ -20,28 +20,30 @@ class _VerificarEmailViewState extends State<VerificarEmailView> {
       appBar: AppBar(
         title: const Text('Verificar email'),
       ),
-      body: Column(children: [
-        const Text(
-            'Hemos enviado un email a tu dirección para confirmar tu registro. Por favor abre el correo y haz clic en el enlace que recibiste para confirmar tu registro.'),
-        const Text(
-            'Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo'),
-        TextButton(
-          onPressed: () {
-            context.read<AuthBloc>().add(
-                  const AuthEventSendEmailVerification(),
-                );
-          },
-          child: const Text('Enviar email de vefificación'),
-        ),
-        TextButton(
-          onPressed: () {
-            context.read<AuthBloc>().add(
-                  const AuthEventLogOut(),
-                );
-          },
-          child: const Text('Reiniciar'),
-        )
-      ]),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          const Text(
+              'Hemos enviado un email a tu dirección para confirmar tu registro. Por favor abre el correo y haz clic en el enlace que recibiste para confirmar tu registro.'),
+          const Text(
+              'Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo'),
+          TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(
+                    const AuthEventSendEmailVerification(),
+                  );
+            },
+            child: const Text('Enviar email de vefificación'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AuthBloc>().add(
+                    const AuthEventLogOut(),
+                  );
+            },
+            child: const Text('Reiniciar'),
+          )
+        ]),
+      ),
     );
   }
 }
