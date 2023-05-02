@@ -103,5 +103,55 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthStateRegistering(exception: null, isLoading: false));
       },
     );
+
+    // Envío de reset de contraseña
+    on<AuthEventForgotPassword>(
+      (event, emit) async {
+        // 1. El usuario hizo clic en el botón para recuperar su contraseña
+        // y se debe mostrar la pantalla correspondiente.
+        emit(const AuthStateForgotPassword(
+          exception: null,
+          hasSentEmail: false,
+          isLoading: false,
+        ));
+
+        final email = event.email;
+        if (email == null) {
+          // En este caso, al no haber un email, el usuario simplemente quiere
+          // ir a la pantalla para recuperar contraseña.
+          return;
+        }
+
+        // En este caso, el usuario Sí quiere enviar un correo para recuperar su
+        // contraseña. Mostrar la pantalla de carga.
+        emit(const AuthStateForgotPassword(
+          exception: null,
+          hasSentEmail: false,
+          isLoading: true,
+        ));
+
+        bool didSendEmail;
+        Exception? exception;
+
+        // Intentar enviar el email para recuperar password.
+        try {
+          await provider.enviarPasswordReset(toEmail: email);
+          didSendEmail = true;
+          exception = null;
+        } on Exception catch (e) {
+          didSendEmail = false;
+          exception = e;
+        }
+
+        // Emitir un estado donde se envíe la exccepción (si se lanzó alguna),
+        // la variable de identificación si el correo fue enviado e indicar
+        // que ya no se está cargando nada.
+        emit(AuthStateForgotPassword(
+          exception: exception,
+          hasSentEmail: didSendEmail,
+          isLoading: false,
+        ));
+      },
+    );
   }
 }
