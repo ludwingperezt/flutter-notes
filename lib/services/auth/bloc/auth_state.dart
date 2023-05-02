@@ -42,6 +42,23 @@ class AuthStateNeedsVerification extends AuthState {
       : super(isLoading: isLoading);
 }
 
+// El estado AuthStateForgotPassword puede conducir a tres posibles estados:
+// 1. El usuario llegó a la pantalla de reseteo de contraseña por error y no
+// tiene necesidad de hacer ese proceso (no state)
+// 2. El usuario solicitó un reset de contraseña pero hubo un error (se lanzó
+// una excepción)
+// 3. El usuario solicitó un reeset de contraseña, y éste fue exitoso.
+class AuthStateForgotPassword extends AuthState {
+  final Exception? exception;
+  final bool hasSentEmail;
+
+  const AuthStateForgotPassword(
+      {required this.exception,
+      required this.hasSentEmail,
+      required bool isLoading})
+      : super(isLoading: isLoading);
+}
+
 /// Cuando se abre la aplicación, el estado es loggedOut sin ninguna excepción
 /// (no ha sucedido ningún error) y isLoading es false porque no se está cargando
 /// nada.  Cuando se ingresan las credenciales para hacer login, el estado sigue
