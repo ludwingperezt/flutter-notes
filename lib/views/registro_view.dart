@@ -101,7 +101,7 @@ class _RegistroViewState extends State<RegistroView> {
                 final password = _password.text;
 
                 // Desencadenar el evento de Registro pero a través de AuthBloc
-                context.read()<AuthBloc>().add(
+                context.read<AuthBloc>().add(
                       AuthEventRegister(
                         email,
                         password,
@@ -114,7 +114,7 @@ class _RegistroViewState extends State<RegistroView> {
               onPressed: () {
                 // Al hacer clic en este botón se debe mostrar la pantalla de login
                 // y eso se puede hacer enviando el evento de logout al AuthBloc
-                context.read()<AuthBloc>().add(const AuthEventLogOut());
+                context.read<AuthBloc>().add(const AuthEventLogOut());
               },
               child: const Text('Ya te has registrado? Login aqui!'),
             )

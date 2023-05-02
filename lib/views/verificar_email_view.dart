@@ -27,7 +27,7 @@ class _VerificarEmailViewState extends State<VerificarEmailView> {
             'Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo'),
         TextButton(
           onPressed: () {
-            context.read()<AuthBloc>().add(
+            context.read<AuthBloc>().add(
                   const AuthEventSendEmailVerification(),
                 );
           },
@@ -35,7 +35,7 @@ class _VerificarEmailViewState extends State<VerificarEmailView> {
         ),
         TextButton(
           onPressed: () {
-            context.read()<AuthBloc>().add(
+            context.read<AuthBloc>().add(
                   const AuthEventLogOut(),
                 );
           },
