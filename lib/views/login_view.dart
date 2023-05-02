@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
           if (state.exception is UserNotFoundAuthException) {
             await mostrarErrorDialog(
               context,
-              'Usuario no encontrado',
+              'No pudimos encontrar un usuario con las credenciales ingresadas',
             );
           } else if (state.exception is WrongPasswordAuthException) {
             await mostrarErrorDialog(
@@ -102,14 +102,24 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextButton(
               onPressed: () {
+                // Aquí se manda a mostrar la view para solicitar la recuperación
+                // de contraseña.
+                context.read<AuthBloc>().add(
+                      const AuthEventForgotPassword(),
+                    );
+              },
+              child: Text('Olvidé mi contraseña'),
+            ),
+            TextButton(
+              onPressed: () {
                 // Aquí se manda a mostrar la view para registrar pero se hace
                 // a través de AuthBloc y no manualmente como estaba antes.
-                context.read()<AuthBloc>().add(
+                context.read<AuthBloc>().add(
                       const AuthEventShouldRegister(),
                     );
               },
               child: Text('Regístrate aquí!'),
-            )
+            ),
           ],
         ),
       ),
