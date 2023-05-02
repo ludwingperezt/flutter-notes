@@ -159,4 +159,10 @@ class MockAuthProvider implements AuthProvider {
 
     return Future.value(user);
   }
+
+  @override
+  Future<void> enviarPasswordReset({required String toEmail}) {
+    // TODO: implement enviarPasswordReset
+    throw UnimplementedError();
+  }
 }
