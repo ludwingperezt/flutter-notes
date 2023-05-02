@@ -32,33 +32,18 @@ class FirebaseCloudStorage {
         documentId: fetchedNota.id, ownerUserId: ownerUserId, texto: '');
   }
 
-  Future<Iterable<CloudNota>> obtenerNotas(
-      {required String ownerUserId}) async {
-    try {
-      // Filtrar las notas que pertenecen al usuario cuyo ID se ha recibido en
-      // los parámetros de la función.
-      return await notas
-          .where(
-            ownerUserIdFieldName,
-            isEqualTo: ownerUserId,
-          )
-          .get()
-          .then(
-            (value) => value.docs.map(
-              (document) => CloudNota.fromSnapshot(document),
-            ),
-          );
-    } catch (e) {
-      throw CouldNotGetAllNotasException();
-    }
-  }
-
   // Retornar un stream al cual se pueda suscribir la UI para mostrar la lista
   // de notas existentes pero filtrando solo aquellas que pertenecen al usuario.
-  Stream<Iterable<CloudNota>> todasNotas({required String ownerUserId}) =>
-      notas.snapshots().map((event) => event.docs
-          .map((document) => CloudNota.fromSnapshot(document))
-          .where((nota) => nota.ownerUserId == ownerUserId));
+  Stream<Iterable<CloudNota>> todasNotas({required String ownerUserId}) {
+    // Al poner el where() antes de snapshots() nos aseguramos de hacer el
+    // filtrado antes de obtener los datos.
+    final listaNotas = notas
+        .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .snapshots()
+        .map((event) =>
+            event.docs.map((document) => CloudNota.fromSnapshot(document)));
+    return listaNotas;
+  }
 
   Future<void> actualizarNota({
     required String documentId,

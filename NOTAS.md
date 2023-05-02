@@ -123,6 +123,23 @@ service cloud.firestore {
 }
 ```  
 
+Estas reglas se actualizaron para mayor seguridad, quedando así:
+* Se permite leer, actualizar y eliminar solo a los usuarios con sesión activa
+  y que sean los propietarios de las notas.
+* Se permite crear notas a los usuarios con sesión activa. 
+
+```  
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == resource.data.user_id;
+      allow create: if request.auth != null;
+    }
+  }
+}
+```  
+
 [Acerca de las colecciones](https://youtu.be/VPvVD8t02U8?t=86428)
 
 [Documentos y colecciones](https://youtu.be/VPvVD8t02U8?t=86635)
