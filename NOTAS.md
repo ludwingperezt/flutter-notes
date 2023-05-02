@@ -194,3 +194,15 @@ es una especie de historial en la cual se van apilando las pantallas o views
 que el usuario va viendo). 
 
 Por lo regular se usan para mostrar loading screens.
+
+## Iconos
+
+[Sitio para encontrar íconos](https://www.stockio.com/)
+[Sitio para generar íconos en distintos tamaños](https://www.appicon.co/)
+
+Para agregar íconos a la app se usa el plugin flutter_launcher_icons  
+
+flutter pub add flutter_launcher_icons
+
+### Generar los íconos:
+flutter pub run flutter_launcher_icons
