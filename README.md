@@ -1,6 +1,15 @@
 # mynotes
 
-A new Flutter project.
+Esta es una app móvil desarrollada como proyecto del siguiente curso/tutorial:
+
+[Flutter Course for Beginners – 37-hour Cross Platform App Development Tutorial](https://www.youtube.com/watch?v=VPvVD8t02U8)
+
+El proyecto depende de lo siguiente:
+* dart
+* flutter
+* Android Studio
+* adb
+* firebase
 
 ## Getting Started
 
