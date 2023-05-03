@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/dialogs/generic_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 
 // Este dialogo para mostrar errores hace uso del diálogo genérico.
 Future<void> mostrarErrorDialog(
@@ -8,10 +9,10 @@ Future<void> mostrarErrorDialog(
 ) {
   return showGenericDialog(
     contexto: contexto,
-    titulo: 'Error',
+    titulo: contexto.loc.error,
     contenido: texto,
     optionsBuilder: () => {
-      'OK': null,
+      contexto.loc.ok: null,
     },
   );
 }

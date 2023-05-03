@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'dart:developer' as devtools show log;
 import 'package:mynotes/dialogs/error_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
@@ -49,40 +50,41 @@ class _LoginViewState extends State<LoginView> {
           if (state.exception is UserNotFoundAuthException) {
             await mostrarErrorDialog(
               context,
-              'No pudimos encontrar un usuario con las credenciales ingresadas',
+              context.loc.impossible_find_user,
             );
           } else if (state.exception is WrongPasswordAuthException) {
             await mostrarErrorDialog(
               context,
-              'Credenciales no válidas',
+              context.loc.invalid_credentials,
             );
           } else if (state.exception is GenericAuthException) {
             await mostrarErrorDialog(
               context,
-              'Error de autenticación',
+              context.loc.authentication_error,
             );
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: Text(context.loc.login),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                    'Por favor, ingresa a tu cuenta para que puedas crear o editar notas.'),
+                Text(
+                  context.loc.access_account,
+                ),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
                   autofocus: true,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'Ingrese su email',
+                  decoration: InputDecoration(
+                    hintText: context.loc.enter_email,
                   ),
                 ),
                 TextField(
@@ -90,8 +92,8 @@ class _LoginViewState extends State<LoginView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Ingrese su contraseña',
+                  decoration: InputDecoration(
+                    hintText: context.loc.enter_password,
                   ),
                 ),
                 TextButton(
@@ -106,7 +108,7 @@ class _LoginViewState extends State<LoginView> {
                         .read<AuthBloc>()
                         .add(AuthEventLogIn(email, password));
                   },
-                  child: const Text('Ingresar'),
+                  child: Text(context.loc.access_account),
                 ),
                 TextButton(
                   onPressed: () {
@@ -116,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                           const AuthEventForgotPassword(),
                         );
                   },
-                  child: Text('Olvidé mi contraseña'),
+                  child: Text(context.loc.forgot_password),
                 ),
                 TextButton(
                   onPressed: () {
@@ -126,7 +128,7 @@ class _LoginViewState extends State<LoginView> {
                           const AuthEventShouldRegister(),
                         );
                   },
-                  child: Text('Regístrate aquí!'),
+                  child: Text(context.loc.register_here),
                 ),
               ],
             ),

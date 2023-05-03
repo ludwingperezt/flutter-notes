@@ -1,0 +1,73 @@
+{
+    "login": "Iniciar sesión",
+    "impossible_find_user": "No pudimos encontrar un usuario con las credenciales ingresadas",
+    "invalid_credentials": "Credenciales no válidas",
+    "authentication_error": "Error de autenticación",
+    "access_account": "Por favor, ingresa a tu cuenta para que puedas crear o editar notas.",
+    "enter_email": "Ingrese su email",
+    "enter_password": "Ingrese su contraseña",
+    "enter": "Ingresar",
+    "forgot_password": "Olvidé mi contraseña",
+    "register_here": "Regístrate aquí!",
+
+    "logout": "Cerrar sesión",
+
+    "weak_password": "Contraseña debil",
+    "email_already_used": "Email en uso",
+    "invalid_email": "Email no válido",
+    "sign_up_failed": "Fallo al registrar usuario",
+    "register": "Registro",
+    "create_account": "Crea una cuenta para crear y editar notas",
+    "sign_up": "Registrarse",
+    "already_signed_up": "Ya te has registrado? Ingresa aqui!",
+
+
+    "verify_email": "Verificar email",
+    "sent_confirm_email_notice": "Hemos enviado un email a tu dirección para confirmar tu registro. Por favor abre el correo y haz clic en el enlace que recibiste para confirmar tu registro.",
+    "sent_confirm_email_notice_2": "Si no has recibido el correo de verificación revisa en spam, si aún así no recibes el correo, haz clic en el botón de abajo",
+    "sent_confirm_email": "Enviar email de vefificación",
+    "reset_view": "Reiniciar",
+
+
+    "wait": "Por favor, espera un momento...",
+    "request_not_processed": "No pudimos procesar la solicitud. Asegúrate de que eres un usuario registrado.",
+    
+    "reset_password": "Recuperar contraseña",
+    "reset_password_notice": "Si olvidaste tu contraseña, ingresa tu email y te enviaremos un enlace para que puedas recuperarla.",
+    "enter_email_hint": "Ingresa tu email aqui",
+    "send_me_link_reset_password": "Envíame el enlace de recuperación",
+    "back_to_login": "Regresar a login",
+
+
+    "new_note": "Nueva nota",
+    "write_your_note": "Escribe tu texto aqui",
+    
+    "wait_load": "Por favor, espera mientras se carga la pantalla de inicio",
+    
+    "please_wait": "Por favor, espera un momento",
+    
+    "share": "Compartir",
+    "share_empty_note_not_allowed": "No puedes compartir una nota vacía",
+    "ok": "OK",
+
+    "delete": "Eliminar",
+    "confirm_delete": "Está seguro de eliminar el elemento?",
+    "cancel": "Cancelar",
+
+    "error": "Error",
+
+    "go_out": "Salir",
+    "go_out_confirm": "Está seguro de cerrar sesión?",
+
+    "reset_password_email_sent": "Hemos enviado un link para que recuperes tu contraseña. Revisa tu email",
+
+    "notes_title": "{count, plural, =0{No hay notas} =1{Una nota} other{{count} notas}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notas"
+            }
+        }
+    }
+}

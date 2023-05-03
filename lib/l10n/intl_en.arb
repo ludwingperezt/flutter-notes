@@ -1,0 +1,75 @@
+{
+    "my_title": "My title (EN)",
+    
+    "login": "login",
+    "impossible_find_user": "We couldn't find any user with the provided credentials",
+    "invalid_credentials": "Invalid credentials",
+    "authentication_error": "Authentication error",
+    "access_account": "Please, login to your account to create and edit notes",
+    "enter_email": "Write your email",
+    "enter_password": "Write your password",
+    "enter": "Login",
+    "forgot_password": "I forgot my password",
+    "register_here": "Register here!",
+
+
+    "logout": "Log out",
+
+    "weak_password": "Weak password",
+    "email_already_used": "Email already in use",
+    "invalid_email": "Invalid email",
+    "sign_up_failed": "Registration failed",
+    "register": "Sign Up",
+    "create_account": "Sign up to create and edit notes",
+    "sign_up": "Sign up",
+    "already_signed_up": "Already registered? Login here!",
+
+
+    "verify_email": "Verify email",
+    "sent_confirm_email_notice": "We have sent an email to your address to confirm your registration. Please, check your email and click the link to confirm your registration process.",
+    "sent_confirm_email_notice_2": "If you cannot see the email, check the spam folder, and if you haven't received the mail yet, click the button below",
+    "sent_confirm_email": "Send verification email",
+    "reset_view": "Return",
+
+
+    "wait": "Please, wait a moment...",
+    "request_not_processed": "We couldn't process your request. Make sure you are a registered user.",
+    "reset_password": "Reset password",
+    "reset_password_notice": "If you forgot your password, write your email and we will send a link to reset your password.",
+    "enter_email_hint": "Write your email here",
+    "send_me_link_reset_password": "Send the recovery link",
+    "back_to_login": "Back to login",
+
+
+    "new_note": "New note",
+    "write_your_note": "Write your text here",
+    
+    "wait_load": "Please, wait while the view loads",
+    
+    "please_wait": "Please, wait a moment",
+    
+    "share": "Share",
+    "share_empty_note_not_allowed": "Sharing an empty note is not allowed",
+    "ok": "OK",
+
+    "delete": "Delete",
+    "confirm_delete": "Are you sure to delete the element?",
+    "cancel": "Cancel",
+
+    "error": "Error",
+
+    "go_out": "Log Out",
+    "go_out_confirm": "Are you sure to close your session?",
+
+    "reset_password_email_sent": "We have sent a link to recover your password. Check your email",
+
+    "notes_title": "{count, plural, =0{No notes yet} =1{One note} other{{count} notes}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notes"
+            }
+        }
+    }
+}

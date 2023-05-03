@@ -1,14 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:mynotes/dialogs/generic_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 
 Future<bool> mostrarLogOutDialog(BuildContext contexto) {
   return showGenericDialog<bool>(
     contexto: contexto,
-    titulo: 'Salir',
-    contenido: 'Está seguro de cerrar sesión?',
+    titulo: contexto.loc.go_out,
+    contenido: contexto.loc.go_out_confirm,
     optionsBuilder: () => {
-      'Cancelar': false,
-      'Salir': true,
+      contexto.loc.cancel: false,
+      contexto.loc.go_out: true,
     },
   ).then((value) => value ?? false);
 

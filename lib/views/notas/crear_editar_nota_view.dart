@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynotes/dialogs/cannot_share_empty_note_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:mynotes/utilities/generics/get_arguments.dart';
@@ -109,7 +110,9 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
   Widget build(BuildContext contexto) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nueva nota'),
+        title: Text(
+          context.loc.new_note,
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -140,8 +143,9 @@ class _CrearEditarNotaViewState extends State<CrearEditarNotaView> {
                 keyboardType: TextInputType.multiline,
                 maxLines:
                     null, // esto es para que el campo se expanda a medida que se agrega texto.
-                decoration:
-                    const InputDecoration(hintText: 'Escribe tu texto aqui'),
+                decoration: InputDecoration(
+                  hintText: context.loc.write_your_note,
+                ),
               );
             default:
               return const CircularProgressIndicator();

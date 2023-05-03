@@ -48,6 +48,9 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   flutter_launcher_icons: ^0.13.1
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +79,9 @@ flutter:
   assets:
     - .env
   #   - images/a_dot_ham.jpeg
+
+  # Esto es importante para la internacionalización.
+  generate: true
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

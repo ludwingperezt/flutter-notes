@@ -248,3 +248,104 @@ o este otro (-e es para usar conexión TCP/IP):
 ```  
 adb -e exec-out screencap -p > /path/al/archivo/captura.png
 ```  
+
+## Internacionalización
+
+Para manejar varios idiomas en una app de flutter es necesario seguir las instrucciones
+de la documentación oficial de flutter para i10n:
+
+[Internationalizing Flutter apps](https://docs.flutter.dev/accessibility-and-localization/internationalization)
+
+En resumen, lo que se hace para internacionalizar una app es:
+
+1.  Instalar los plugins de internacionalización
+
+2.  Crear el archivo l10n.yaml en la raíz del proyecto y definir en ese archivo
+    el directorio donde se ubicarán las cadenas de texto y las traducciones
+    y el idioma principal de la aplicación.  También se especifica el nombre
+    del archivo de salida de las traducciones.
+
+3.  Crear el directorio configurado para almacenar los archivos .arb que contienen
+    los textos de traducción.  
+
+4.  Crear los archivos .arb para cada idioma soportado.
+    Estos archivos son creados en la carpeta que se defina en el archivo l10n.yaml,
+    pero regularmente se colocan en la carpeta ```lib/l10n```.
+    Los archivos .arb son archivos json donde cada 
+    clave corresponde a un texto a mostrar al usuario y al que luego se puede
+    referenciar en el código.  También pueden contener una sintaxis especial
+    con código para definir las pluralizaciones.
+    Todos los archivos .arb que existan deben tener las mismas keys pero con los
+    textos en el idioma que corresponda a cada archivo.
+
+5.  En el caso de una app para iOS es necesario definir los idiomas a manejar.
+    Para android esto se hace de forma automática.
+    Esta definición de idiomas se hace en el archivo:
+    ```ios/Runner/Info.plist```
+    En el cual se agrega la key **CFBundleLocalizations** la cual es una lista
+    con los códigos cortos de idiomas los idiomas que se manejan.
+
+6.  Para que los textos y traducciones estén disponibles en los archivos que 
+    definen las vistas, es necesario recompilar el proyecto.  Esto se hace 
+    haciendo hot-restart de la aplicación cada vez que los archivos .arb cambian.
+    La salida del proceso de compilación de los archivos de traducciones se 
+    coloca en la path:
+    ```.dart_tool/flutter_gen/gen_l10n```
+    En el archivo de salida app_localizations.dart que se encuentra dentro de
+    ese directorio se encuentra una clase que puede ser referenciada desde el 
+    código para obtener los textos y mostrarlos a los ususarios en los widgets
+    que correspondan.
+
+    También es necesario declarar el soporte de internacionalización en el archivo
+    main.dart, por medio de los parámetros "supportedLocales" y 
+    "localizationsDelegates" del constructor del objeto MaterialApp.
+
+7.  En los archivos de views, donde los textos son mostrados al usuario, para
+    mostrar un texto en un widget en principio se haría lo siguiente:
+
+    ``` 
+    import 'package:flutter_gen/gen_l10n/app_localizations.dart' show AppLocalizations;
+
+    Text(AppLocalizations.of(this)!.my_text)
+    ``` 
+
+    Pero para tener un acceso más fácil al texto, lo recomendable es generar
+    una extensión sobre BuildContext que sea un getter que retorne la clase
+    AppLocalizations o que lance una excepción si no ésta no existe.
+    (Ver la implementación de esta extensión en ```lib/extensions/buildcontext/loc.dart```)
+
+    De esta manera, el acceso al texto se facilitaría como en el ejemplo siguiente:
+
+    ``` 
+    import 'package:mynotes/extensions/buildcontext/loc.dart';
+
+    Text(context.loc.my_text)
+    ``` 
+
+8.  Para mostrar pluralizaciones es necesario definir la función que decida 
+    cómo mostrar cada texto según un número enviado como parámetro.  La implementación
+    de esto se puede ver en los archivos .arb ubicados en ```lib/l10n```
+    en la key "notes_title", la cual define como mostrar el título de la página
+    de notas según si hay 0, 1 o más notas.
+    En el archivo ```lib/views/notas_view.dart``` se definió en el title del
+    appBar, un StreamBuilder que retorne la cantidad de notas obtenidas en el 
+    momento que hayan datos disponibles.  Esa cantidad es enviada a la clase 
+    AppLocalizations en la función ```notes_title()``` para que retorne la 
+    pluralización adecuada.  Sin embargo, es necesario crear un extension agregado
+    a un Stream, el cual retorne la cantidad de elementos del Iterable que forma
+    parte del Stream. (Ver la implementación de ese extension al inicio del archivo
+    ```lib/views/notas_view.dart```).
+
+## Enlaces de interés
+
+[Build and release an Android app](https://docs.flutter.dev/deployment/android)
+[Adding a splash screen to your Android app](https://docs.flutter.dev/platform-integration/android/splash-screen)
+[Flutter - Cloud Firestore](https://firebase.flutter.dev/docs/firestore/usage/)
+[Navigate with named routes](https://docs.flutter.dev/cookbook/navigation/named-routes)
+[Using Firebase Authentication](https://firebase.flutter.dev/docs/auth/usage/)
+[Internationalizing Flutter apps](https://docs.flutter.dev/accessibility-and-localization/internationalization)
+
+### Librerías utilizadas
+[share_plus](https://pub.dev/packages/share_plus)
+[flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+[flutter_launcher_icons](https://pub.dev/packages/flutter_launcher_icons)

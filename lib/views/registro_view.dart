@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/dialogs/error_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
@@ -50,29 +51,29 @@ class _RegistroViewState extends State<RegistroView> {
           if (state.exception is WeakPasswordAuthException) {
             await mostrarErrorDialog(
               context,
-              'Contraseña debil',
+              context.loc.weak_password,
             );
           } else if (state.exception is EmailAlreadyInUseAuthException) {
             await mostrarErrorDialog(
               context,
-              'Email en uso',
+              context.loc.email_already_used,
             );
           } else if (state.exception is InvalidEmailAuthException) {
             await mostrarErrorDialog(
               context,
-              'Email no válido',
+              context.loc.invalid_email,
             );
           } else if (state.exception is GenericAuthException) {
             await mostrarErrorDialog(
               context,
-              'Fallo al registrar usuario',
+              context.loc.sign_up_failed,
             );
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Registro'),
+          title: Text(context.loc.register),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -81,15 +82,15 @@ class _RegistroViewState extends State<RegistroView> {
               crossAxisAlignment:
                   CrossAxisAlignment.start, // alinear a la izquierda
               children: [
-                const Text('Crea una cuenta para crear y editar notas'),
+                Text(context.loc.create_account),
                 TextField(
                   controller: _email,
                   enableSuggestions: false,
                   autocorrect: false,
                   autofocus: true,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'Ingrese su email',
+                  decoration: InputDecoration(
+                    hintText: context.loc.enter_email,
                   ),
                 ),
                 TextField(
@@ -97,8 +98,8 @@ class _RegistroViewState extends State<RegistroView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: const InputDecoration(
-                    hintText: 'Ingrese su contraseña',
+                  decoration: InputDecoration(
+                    hintText: context.loc.enter_password,
                   ),
                 ),
                 Center(
@@ -118,7 +119,7 @@ class _RegistroViewState extends State<RegistroView> {
                                 ),
                               );
                         },
-                        child: const Text('Registrarse'),
+                        child: Text(context.loc.sign_up),
                       ),
                       TextButton(
                         onPressed: () {
@@ -126,7 +127,7 @@ class _RegistroViewState extends State<RegistroView> {
                           // y eso se puede hacer enviando el evento de logout al AuthBloc
                           context.read<AuthBloc>().add(const AuthEventLogOut());
                         },
-                        child: const Text('Ya te has registrado? Login aqui!'),
+                        child: Text(context.loc.already_signed_up),
                       ),
                     ],
                   ),

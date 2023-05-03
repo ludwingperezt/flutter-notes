@@ -6,6 +6,7 @@ import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/firebase_auth_provider.dart';
 import 'package:mynotes/views/inicio_view.dart';
 import 'package:mynotes/views/notas/crear_editar_nota_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// La función main() NO ES INVOCADA durante los hot reloads.
 void main() async {
@@ -21,6 +22,8 @@ void main() async {
   // recursos.
   runApp(
     MaterialApp(
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.

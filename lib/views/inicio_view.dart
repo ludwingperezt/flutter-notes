@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 import 'package:mynotes/helpers/loading/loading_screen.dart';
 import 'package:mynotes/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
@@ -37,8 +38,7 @@ class InicioView extends StatelessWidget {
       listener: (context, state) {
         if (state.isLoading) {
           LoadingScreen().show(
-              context: context,
-              text: state.loadingText ?? 'Por favor, espera un momento...');
+              context: context, text: state.loadingText ?? context.loc.wait);
         } else {
           LoadingScreen().hide();
         }

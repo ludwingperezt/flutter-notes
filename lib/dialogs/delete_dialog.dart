@@ -1,14 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:mynotes/dialogs/generic_dialog.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 
 Future<bool> showEliminarDialog(BuildContext contexto) {
   return showGenericDialog<bool>(
     contexto: contexto,
-    titulo: 'Eliminar',
-    contenido: 'Está seguro de eliminar el elemento?',
+    titulo: contexto.loc.delete,
+    contenido: contexto.loc.confirm_delete,
     optionsBuilder: () => {
-      'Cancelar': false,
-      'Eliminar': true,
+      contexto.loc.cancel: false,
+      contexto.loc.delete: true,
     },
   ).then((value) => value ?? false);
 

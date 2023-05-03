@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/dialogs/logout_dialog.dart';
 import 'package:mynotes/enums/menu_action.dart';
+import 'package:mynotes/extensions/buildcontext/loc.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:mynotes/services/auth/auth_service.dart';
@@ -11,6 +12,15 @@ import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/services/cloud/firebase_cloud_storage.dart';
 import 'package:mynotes/views/notas/list_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show ReadContext;
+
+/// Esta extension se usa para enviar el conteo de notas a la localización y de
+/// esa forma mostrar la pluralización correcta en el título.
+/// Esta es una extensión creada sobre cualquier Stream cuyo tipo sea un Iterable
+/// ya que todo iterable tiene la propiedad lenght, que es el conteo de elemento
+/// que contiene.
+extension Count<T extends Iterable> on Stream<T> {
+  Stream<int> get getLength => map((event) => event.length);
+}
 
 class NotasView extends StatefulWidget {
   const NotasView({super.key});
@@ -35,7 +45,18 @@ class _NotasViewState extends State<NotasView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notas'),
+        title: StreamBuilder<int>(
+          stream: _notasService.todasNotas(ownerUserId: userId).getLength,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final noteCount = snapshot.data ?? 0;
+              final text = context.loc.notes_title(noteCount);
+              return Text(text);
+            } else {
+              return const Text('');
+            }
+          },
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -66,9 +87,9 @@ class _NotasViewState extends State<NotasView> {
             },
             itemBuilder: (context) {
               return [
-                const PopupMenuItem<MenuAction>(
+                PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('Cerrar sesión'),
+                  child: Text(context.loc.logout),
                 )
               ];
             },
